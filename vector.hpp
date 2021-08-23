@@ -1,13 +1,14 @@
 #pragma once
 
 #include <memory>
+#include "iterator.hpp"
 
 namespace ft
 {
 	template < class T, class Allocator = std::allocator<T> >
 	class vector
 	{
-		protected:
+		public:
 			typedef T value_type;
 			typedef Allocator allocator_type;
 			typedef std::size_t size_type;
@@ -16,7 +17,9 @@ namespace ft
 			typedef typename allocator_type::const_reference const_reference;
 			typedef typename allocator_type::pointer pointer;
 			typedef typename allocator_type::const_pointer const_pointer;
+			typedef typename ft::v_iterator<T> iterator;
 		
+		protected:
 			pointer __begin_;
 			pointer __end_;
 			pointer __end_cap_;
@@ -27,7 +30,7 @@ namespace ft
 			: __begin_(NULL), __end_(NULL), __end_cap_(NULL), __alloc_(alloc) {};
 
 			explicit vector (size_type n, const value_type &val = value_type(),
-			const allocator_type& alloc = allocator_type()) : __alloc_(alloc)
+			const allocator_type &alloc = allocator_type()) : __alloc_(alloc)
 			{
 				__begin_ = __end_ = alloc.allocate(n);
 				for (size_t i = 0; i < n; i++)
