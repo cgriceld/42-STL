@@ -4,7 +4,7 @@
 
 namespace ft
 {
-	// Iterator tags
+	// ========================== TAGS ========================== //
 
 	struct input_iterator_tag {};
 	struct output_iterator_tag {};
@@ -12,7 +12,7 @@ namespace ft
 	struct bidirectional_iterator_tag : public forward_iterator_tag {};
 	struct random_access_iterator_tag : public bidirectional_iterator_tag {};
 
-	// Iterator traits
+	// ========================== TRAITS ========================== //
 
 	template<typename Iterator>
 	struct iterator_traits
@@ -44,42 +44,83 @@ namespace ft
 		typedef const T &reference;
 	};
 
-	// Base iterator class
+	// ========================== BASE ITERATOR CLASS ========================== //
 
 	template<typename Category, typename T, typename Distance = std::ptrdiff_t,
 		typename Pointer = T*, typename Reference = T&>
 	struct iterator
 	{
-		typedef Category  iterator_category;
-		typedef T        value_type;
-		typedef Distance  difference_type;
-		//typedef Pointer   pointer;
+		typedef Category iterator_category;
+		typedef T value_type;
+		typedef Distance difference_type;
+		typedef Pointer pointer;
 		typedef Reference reference;
-
-		Pointer a;
 	};
 
-	// Vector iterator (LegacyRandomAccessIterator)
+	// ========================== LegacyRandomAccessIterator ========================== //
 
 	template<typename T>
-	class v_iterator : public iterator_traits<T *>
+	class v_iterator : public iterator <random_access_iterator_tag, T>
 	{
 		public:
+		typedef typename iterator<random_access_iterator_tag, T>::reference reference;
+			typedef typename iterator<random_access_iterator_tag, T>::pointer pointer;
+			typedef typename iterator<random_access_iterator_tag, T>::difference_type difference_type;
+
+			v_iterator(pointer current = NULL) : _current(current) {};
+			explicit v_iterator(const v_iterator &copy) : _current(i._current) {};
+			~v_iterator() {};
+
+			v_iterator &operator = (const v_iterator &copy)
+			{
+				if (this != copy)
+					_current = copy._current;
+				return (*this);
+			}
+
+			reference operator [] (difference_type __n) const
+			{
+				return (*(_current + __n));
+			}
+
+			reference operator * (void) const
+			{
+				return (*_current);
+			}
+
+			pointer operator -> (void) const
+			{
+				return (_current);
+			}
+
+			v_iterator &operator += (difference_type __n)
+			{
+				_current += __n;
+				return (*this);
+			}
+
+			v_iterator &operator + (difference_type __n) const
+			{
+				return (v_iterator(_current + __n));
+			}
+
+			v_iterator &operator -= (difference_type __n)
+			{
+				_current -= __n;
+				return (*this);
+			}
+
+			v_iterator &operator - (difference_type __n) const
+			{
+				return (v_iterator(_current - __n));
+			}
+
+			const pointer &base(void) const
+			{
+				return (_current);
+			}
+		
+		private:
 			pointer _current;
-
-		// typedef iterator_traits<T *> __traits_type;
-
-		// public:
-		// 	typedef typename __traits_type::reference reference;
-		// 	typedef typename __traits_type::pointer pointer;
-		// 	typedef typename __traits_type::difference_type difference_type;
-
-		// 	v_iterator() : _current(Iterator()) {};
-		// 	explicit v_iterator(const Iterator &i) : _current(i) {};
-
-		// 	reference operator[](difference_type __n) const
-		// 	{
-		// 		return *(*this + __n);
-		// 	}
 	};
 	}

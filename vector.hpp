@@ -26,6 +26,9 @@ namespace ft
 			allocator_type __alloc_;
 
 		public:
+
+		// ========================== CONSTRUCTORS ========================== //
+
 			explicit vector (const allocator_type &alloc = allocator_type())
 			: __begin_(NULL), __end_(NULL), __end_cap_(NULL), __alloc_(alloc) {};
 
@@ -43,6 +46,8 @@ namespace ft
 
 			// vector (const vector& x);
 
+		// ========================== DESTRUCTOR ========================== //
+
 			~vector() 
 			{
 				//clear()
@@ -53,6 +58,8 @@ namespace ft
 				
 			}
 
+		// ========================== OPERATORS ========================== //
+
 			reference operator[] (size_type n)
 			{
 				return (*(__begin_ + n));
@@ -62,6 +69,21 @@ namespace ft
 			{
 				return (*(__begin_ + n));
 			}
+
+		// ========================== ITERATORS ========================== //
+
+			iterator begin(void)
+			{
+				return (iterator(__begin_));
+			}
+
+			iterator end(void)
+			{
+				return (iterator(__end_));
+			}
+
+		// ========================== MEMBER FUNCTIONS ========================== //
+
 
 			void clear(void)
 			{
