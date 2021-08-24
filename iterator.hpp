@@ -68,7 +68,7 @@ namespace ft
 			typedef typename iterator<random_access_iterator_tag, T>::difference_type difference_type;
 
 			v_iterator(pointer current = NULL) : _current(current) {};
-			explicit v_iterator(const v_iterator &copy) : _current(i._current) {};
+			explicit v_iterator(const v_iterator &copy) : _current(copy._current) {};
 			~v_iterator() {};
 
 			v_iterator &operator = (const v_iterator &copy)
@@ -101,7 +101,7 @@ namespace ft
 
 			v_iterator operator ++ (int)
 			{
-				return (v_iterator(__current_++));
+				return (v_iterator(_current++));
 			}
 
 			v_iterator &operator += (difference_type __n)
@@ -123,7 +123,7 @@ namespace ft
 
 			v_iterator operator -- (int)
 			{
-				return (v_iterator(__current_--));
+				return (v_iterator(_current--));
 			}
 
 			v_iterator &operator -= (difference_type __n)
@@ -151,5 +151,87 @@ namespace ft
 			pointer _current;
 	};
 
+	template<typename T>
+	bool operator == (const v_iterator<T> &l, const v_iterator<T> &r)
+	{
+		return (l.base() == r.base());
+	}
 
+	template<typename lT, typename rT>
+	bool operator == (const v_iterator<lT> &l, const v_iterator<rT> &r)
+	{
+		return (l.base() == r.base());
+	}
+
+	template<typename T>
+	bool operator != (const v_iterator<T> &l, const v_iterator<T> &r)
+	{
+		return (l.base() != r.base());
+	}
+
+	template<typename lT, typename rT>
+	bool operator != (const v_iterator<lT> &l, const v_iterator<rT> &r)
+	{
+		return (l.base() != r.base());
+	}
+
+	template<typename T>
+	bool operator < (const v_iterator<T> &l, const v_iterator<T> &r)
+	{
+		return (l.base() < r.base());
+	}
+
+	template<typename lT, typename rT>
+	bool operator < (const v_iterator<lT> &l, const v_iterator<rT> &r)
+	{
+		return (l.base() < r.base());
+	}
+
+	template<typename T>
+	bool operator <= (const v_iterator<T> &l, const v_iterator<T> &r)
+	{
+		return (l.base() <= r.base());
+	}
+
+	template<typename lT, typename rT>
+	bool operator <= (const v_iterator<lT> &l, const v_iterator<rT> &r)
+	{
+		return (l.base() <= r.base());
+	}
+
+	template<typename T>
+	bool operator > (const v_iterator<T> &l, const v_iterator<T> &r)
+	{
+		return (l.base() > r.base());
+	}
+
+	template<typename lT, typename rT>
+	bool operator > (const v_iterator<lT> &l, const v_iterator<rT> &r)
+	{
+		return (l.base() > r.base());
+	}
+
+	template<typename T>
+	bool operator >= (const v_iterator<T> &l, const v_iterator<T> &r)
+	{
+		return (l.base() >= r.base());
+	}
+
+	template<typename lT, typename rT>
+	bool operator >= (const v_iterator<lT> &l, const v_iterator<rT> &r)
+	{
+		return (l.base() >= r.base());
+	}
+
+	template<typename T>
+	typename v_iterator<T>::difference_type operator - (const v_iterator<T> &l, const v_iterator<T> &r)
+	{
+		return (l.base() - r.base());
+	}
+
+	template<typename lT, typename rT>
+	bool operator - (const v_iterator<lT> &l, const v_iterator<rT> &r)
+	{
+		return (l.base() - r.base());
+	}
 }
