@@ -63,17 +63,17 @@ namespace ft
 	class v_iterator : public iterator <random_access_iterator_tag, T>
 	{
 		public:
-			typedef typename iterator<random_access_iterator_tag, T>::reference reference;
-			typedef typename iterator<random_access_iterator_tag, T>::pointer pointer;
-			typedef typename iterator<random_access_iterator_tag, T>::difference_type difference_type;
+			typedef typename v_iterator<T>::reference reference;
+			typedef typename v_iterator<T>::pointer pointer;
+			typedef typename v_iterator<T>::difference_type difference_type;
 
 			v_iterator(pointer current = NULL) : _current(current) {};
-			explicit v_iterator(const v_iterator &copy) : _current(copy._current) {};
+			v_iterator(const v_iterator &copy) : _current(copy._current) {};
 			~v_iterator() {};
 
 			v_iterator &operator = (const v_iterator &copy)
 			{
-				if (this != copy)
+				if (this != &copy)
 					_current = copy._current;
 				return (*this);
 			}
@@ -230,7 +230,7 @@ namespace ft
 	}
 
 	template<typename lT, typename rT>
-	bool operator - (const v_iterator<lT> &l, const v_iterator<rT> &r)
+	typename v_iterator<lT>::difference_type operator - (const v_iterator<lT> &l, const v_iterator<rT> &r)
 	{
 		return (l.base() - r.base());
 	}
