@@ -57,13 +57,13 @@ namespace ft
 		typedef Reference reference;
 	};
 
-	// ========================== LegacyRandomAccessIterator ========================== //
+	// ========================== [const] LegacyRandomAccessIterator ========================== //
 
 	template<typename T>
 	class v_iterator : public iterator <random_access_iterator_tag, T>
 	{
 		public:
-		typedef typename iterator<random_access_iterator_tag, T>::reference reference;
+			typedef typename iterator<random_access_iterator_tag, T>::reference reference;
 			typedef typename iterator<random_access_iterator_tag, T>::pointer pointer;
 			typedef typename iterator<random_access_iterator_tag, T>::difference_type difference_type;
 
@@ -93,6 +93,17 @@ namespace ft
 				return (_current);
 			}
 
+			v_iterator &operator ++ (void)
+			{
+				++_current;
+				return (*this);
+			}
+
+			v_iterator operator ++ (int)
+			{
+				return (v_iterator(__current_++));
+			}
+
 			v_iterator &operator += (difference_type __n)
 			{
 				_current += __n;
@@ -102,6 +113,17 @@ namespace ft
 			v_iterator &operator + (difference_type __n) const
 			{
 				return (v_iterator(_current + __n));
+			}
+
+			v_iterator &operator -- (void)
+			{
+				--_current;
+				return (*this);
+			}
+
+			v_iterator operator -- (int)
+			{
+				return (v_iterator(__current_--));
 			}
 
 			v_iterator &operator -= (difference_type __n)
@@ -115,6 +137,11 @@ namespace ft
 				return (v_iterator(_current - __n));
 			}
 
+			// difference_type operator - (const v_iterator &other) const
+			// {
+			// 	return (_current - other._current);
+			// }
+
 			const pointer &base(void) const
 			{
 				return (_current);
@@ -123,4 +150,6 @@ namespace ft
 		private:
 			pointer _current;
 	};
-	}
+
+
+}
