@@ -61,30 +61,19 @@ namespace ft
 
 		// ========================== OPERATORS ========================== //
 
-			reference operator[] (size_type n)
-			{
-				return (*(__begin_ + n));
-			}
+			reference operator[] (size_type n) { return (__begin_[n]); };
 
-			const_reference operator[] (size_type n) const
-			{
-				return (*(__begin_ + n));
-			}
+			const_reference operator[] (size_type n) const { return (__begin_[n]); };
 
 		// ========================== ITERATORS ========================== //
 
-			iterator begin(void)
-			{
-				return (iterator(__begin_));
-			}
+			iterator begin(void) { return (__begin_); };
+			const_iterator begin(void) const { return (__begin_); };
 
-			iterator end(void)
-			{
-				return (iterator(__end_));
-			}
+			iterator end(void) { return (__end_); };
+			const_iterator end(void) const { return (__end_); };
 
 		// ========================== MEMBER FUNCTIONS ========================== //
-
 
 			void clear(void)
 			{

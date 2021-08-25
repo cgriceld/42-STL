@@ -67,20 +67,26 @@ namespace ft
 			typedef typename v_iterator<T>::pointer pointer;
 			typedef typename v_iterator<T>::difference_type difference_type;
 
-			v_iterator(pointer current = NULL) : _current(current) {};
+		// ---------------- CONSTRUCTORS & DESTRUCTOR ---------------- //
+
+			v_iterator() : _current(NULL) {};
+			explicit v_iterator(pointer current) : _current(current) {};
 			v_iterator(const v_iterator &copy) : _current(copy._current) {};
-			~v_iterator() {};
 
 			v_iterator &operator = (const v_iterator &copy)
 			{
 				if (this != &copy)
 					_current = copy._current;
 				return (*this);
-			}
+			};
+
+			~v_iterator() {};
+
+		// ---------------- ACCESS ---------------- //
 
 			reference operator [] (difference_type __n) const
 			{
-				return (*(_current + __n));
+				return (_current[__n]);
 			}
 
 			reference operator * (void) const
@@ -90,8 +96,15 @@ namespace ft
 
 			pointer operator -> (void) const
 			{
+				return (&**this);
+			}
+
+			pointer base(void) const
+			{
 				return (_current);
 			}
+
+		// ---------------- PLUS ---------------- //
 
 			v_iterator &operator ++ (void)
 			{
@@ -101,7 +114,7 @@ namespace ft
 
 			v_iterator operator ++ (int)
 			{
-				return (v_iterator(_current++));
+				return (_current++);
 			}
 
 			v_iterator &operator += (difference_type __n)
@@ -110,10 +123,12 @@ namespace ft
 				return (*this);
 			}
 
-			v_iterator &operator + (difference_type __n) const
+			v_iterator operator + (difference_type __n) const
 			{
-				return (v_iterator(_current + __n));
+				return (_current + __n);
 			}
+
+			// ---------------- MINUS ---------------- //
 
 			v_iterator &operator -- (void)
 			{
@@ -123,7 +138,7 @@ namespace ft
 
 			v_iterator operator -- (int)
 			{
-				return (v_iterator(_current--));
+				return (_current--);
 			}
 
 			v_iterator &operator -= (difference_type __n)
@@ -132,19 +147,9 @@ namespace ft
 				return (*this);
 			}
 
-			v_iterator &operator - (difference_type __n) const
+			v_iterator operator - (difference_type __n) const
 			{
-				return (v_iterator(_current - __n));
-			}
-
-			// difference_type operator - (const v_iterator &other) const
-			// {
-			// 	return (_current - other._current);
-			// }
-
-			const pointer &base(void) const
-			{
-				return (_current);
+				return (_current - __n);
 			}
 		
 		private:
@@ -234,4 +239,41 @@ namespace ft
 	{
 		return (l.base() - r.base());
 	}
+
+	template<typename T>
+	v_iterator<T> operator + (typename v_iterator<T>::difference_type __n, const v_iterator<T> &i)
+	{
+		return (i + __n);
+	}
+
+	// // ========================== REVERSE_ITERATOR ========================== //
+
+	// template<typename _Iterator>
+	// class reverse_iterator : public iterator<typename iterator_traits<_Iterator>::iterator_category,
+	// 						typename iterator_traits<_Iterator>::value_type,
+	// 						typename iterator_traits<_Iterator>::difference_type,
+	// 						typename iterator_traits<_Iterator>::pointer,
+	// 						typename iterator_traits<_Iterator>::reference>
+	// {
+	// 	protected:
+	// 		_Iterator _current;
+
+	// 		typedef iterator_traits<_Iterator>                __traits_type;
+
+	// 	public:
+	// 		typedef _Iterator                                        iterator_type;
+	// 		typedef typename __traits_type::difference_type        difference_type;
+	// 		typedef typename __traits_type::pointer                pointer;
+	// 		typedef typename __traits_type::reference                reference;
+
+	// 		reverse_iterator() : _current() {};
+	// 		explicit reverse_iterator(iterator_type __x) : _current(__x) {};
+
+	// 		template<class U>
+	// 		reverse_iterator(const reverse_iterator<U> &__x) : _current(__x.current) {};
+
+	// 		_Iterator base(void) const { return (_current); };
+
+	// 		reference operator * (void) const {};
+	// };
 }
