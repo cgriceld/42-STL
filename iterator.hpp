@@ -96,7 +96,7 @@ namespace ft
 
 			pointer operator -> (void) const
 			{
-				return (&**this);
+				return (_current);
 			}
 
 			pointer base(void) const
@@ -246,34 +246,60 @@ namespace ft
 		return (i + __n);
 	}
 
-	// // ========================== REVERSE_ITERATOR ========================== //
+	// ========================== REVERSE_ITERATOR ========================== //
 
-	// template<typename _Iterator>
-	// class reverse_iterator : public iterator<typename iterator_traits<_Iterator>::iterator_category,
-	// 						typename iterator_traits<_Iterator>::value_type,
-	// 						typename iterator_traits<_Iterator>::difference_type,
-	// 						typename iterator_traits<_Iterator>::pointer,
-	// 						typename iterator_traits<_Iterator>::reference>
-	// {
-	// 	protected:
-	// 		_Iterator _current;
+	template<typename _Iterator>
+	class reverse_iterator : public iterator<typename iterator_traits<_Iterator>::iterator_category,
+							typename iterator_traits<_Iterator>::value_type,
+							typename iterator_traits<_Iterator>::difference_type,
+							typename iterator_traits<_Iterator>::pointer,
+							typename iterator_traits<_Iterator>::reference>
+	{
+		protected:
+			_Iterator _current;
 
-	// 		typedef iterator_traits<_Iterator>                __traits_type;
+			typedef iterator_traits<_Iterator> __traits_type;
 
-	// 	public:
-	// 		typedef _Iterator                                        iterator_type;
-	// 		typedef typename __traits_type::difference_type        difference_type;
-	// 		typedef typename __traits_type::pointer                pointer;
-	// 		typedef typename __traits_type::reference                reference;
+		public:
+			typedef _Iterator iterator_type;
+			typedef typename __traits_type::difference_type difference_type;
+			typedef typename __traits_type::pointer pointer;
+			typedef typename __traits_type::reference reference;
 
-	// 		reverse_iterator() : _current() {};
-	// 		explicit reverse_iterator(iterator_type __x) : _current(__x) {};
+		// ---------------- CONSTRUCTORS & DESTRUCTOR ---------------- //
 
-	// 		template<class U>
-	// 		reverse_iterator(const reverse_iterator<U> &__x) : _current(__x.current) {};
+			reverse_iterator() : _current() {};
+			explicit reverse_iterator(iterator_type __x) : _current(__x) {};
 
-	// 		_Iterator base(void) const { return (_current); };
+			template<class U>
+			reverse_iterator(const reverse_iterator<U> &__x) : _current(__x.current) {};
 
-	// 		reference operator * (void) const {};
-	// };
+			template<class U>
+			reverse_iterator &operator = (const reverse_iterator<U> &other)
+			{
+				if (this != &other)
+					_current = other._current;
+				return (*this);
+			}
+
+		// ---------------- ACCESS ---------------- //
+
+			iterator_type base(void) const { return (_current); };
+
+			reference operator * (void) const
+			{
+				iterator_type tmp = _current;
+				return (*--tmp);
+			};
+
+			pointer operator->() const
+			{
+				return (&(operator*()));
+			}
+
+			reference operator [] (difference_type n)
+			{
+				return (base()[-n - 1]);
+			}
+	};
 }

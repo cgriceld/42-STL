@@ -19,6 +19,8 @@ namespace ft
 			typedef typename allocator_type::const_pointer const_pointer;
 			typedef typename ft::v_iterator<T> iterator;
 			typedef typename ft::v_iterator<const T> const_iterator;
+			typedef typename ft::reverse_iterator<iterator> reverse_iterator;
+			typedef typename ft::reverse_iterator<const_iterator> const_reverse_iterator;
 		
 		protected:
 			pointer __begin_;
@@ -70,8 +72,14 @@ namespace ft
 			iterator begin(void) { return (__begin_); };
 			const_iterator begin(void) const { return (__begin_); };
 
+			reverse_iterator rbegin(void) { return (__end_); };
+			const_reverse_iterator rbegin(void) const { return (__end_); };
+
 			iterator end(void) { return (__end_); };
 			const_iterator end(void) const { return (__end_); };
+
+			reverse_iterator rend(void) { return (__begin_); };
+			const_reverse_iterator rend(void) const { return (__begin_); };
 
 		// ========================== MEMBER FUNCTIONS ========================== //
 
