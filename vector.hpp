@@ -30,7 +30,7 @@ namespace ft
 
 		public:
 
-		// ========================== CONSTRUCTORS ========================== //
+		// ========================== CONSTRUCTORS & DESTRUCTOR ========================== //
 
 			explicit vector (const allocator_type &alloc = allocator_type())
 			: __begin_(NULL), __end_(NULL), __end_cap_(NULL), __alloc_(alloc) {};
@@ -49,19 +49,14 @@ namespace ft
 
 			// vector (const vector& x);
 
-		// ========================== DESTRUCTOR ========================== //
-
 			~vector() 
 			{
-				//clear()
-
-				// // if _begin
-				// while (__begin_ != __end_)
-				// 	alloc.destroy(__begin_);
-				
+				clear();
+				alloc.deallocate(__begin_, capacity());
 			}
 
 		// ========================== OPERATORS ========================== //
+			// operator = {assign(begin, end)}
 
 			reference operator[] (size_type n) { return (__begin_[n]); };
 
@@ -89,61 +84,104 @@ namespace ft
 			{
 				if (n < 0 || n >= size())
 					throw std::out_of_range("index is out of range");
-				return (*(__begin_ + n));
+				return (__begin_[n]);
 			}
 
 			const_reference at (size_type n) const
 			{
 				if (n < 0 || n >= size())
 					throw std::out_of_range("index is out of range");
-				return (*(__begin_ + n));
+				return (__begin_[n]);
 			}
 
-			size_type capacity(void) const
+			reference front(void) { return (*__begin_); };
+
+			const_reference front(void) const { return (*__begin_); };
+
+			reference back(void) { return (*(__end_ - 1)); };
+
+			const_reference back(void) const { return (*(__end_ - 1)); };
+
+			size_type capacity(void) const { return (static_cast<size_type>(__end_cap_ - __begin_)); };
+
+			bool empty(void) const { return (__begin_ == __end_); };
+
+			size_type size(void) const { return (static_cast<size_type>(__end_ - __begin_)); };
+
+			size_type max_size(void) const { return (__alloc_.max_size()); };
+
+			allocator_type get_allocator(void) const { return (__alloc_); };
+
+		// ---------------- MODIFIERS ---------------- //
+
+			iterator erase (iterator first, iterator last)
 			{
-				return (static_cast<size_type>(__end_cap_ - __begin_));
+				if (first == last)
+					return;
+				difference_type diff = last - first;
+				for(; first != last; first++)
+					alloc.destroy(first);
+				if (; last != __end_; last++)
+				{
+					alloc.construct(last - diff, *last);
+					alloc.destroy(last);
+				}
+				__end_ -= diff;
+				return (first);
 			}
 
-			bool empty(void) const
+			iterator erase (iterator position) { return (erase(position, position + 1)); };
+
+			void clear(void) { erase(__begin_, __end_); };
+
+			void pop_back(void) { erase(__end_ - 1, __end_); };
+
+			template <class InputIterator>
+			void insert (iterator position, InputIterator first, InputIterator last)
 			{
-				return (__begin_ == __end_);
+
 			}
 
-			size_type size(void) const
+			void insert (iterator position, size_type n, const value_type &val);
+
+			iterator insert (iterator position, const value_type &val)
 			{
-				return (static_cast<size_type>(__end_ - __begin_));
+				
 			}
 
-			size_type max_size(void) const
+			void resize (size_type n, value_type val = value_type())
 			{
-				return (__alloc_.max_size());
+				if (n < size())
+					erase(__begin_ + n, __end_);
+				else
+					insert(end(), val);
 			}
 
-			reference front(void)
+			void reserve (size_type n)
 			{
-				return (*__begin_);
+				if (n > capacity())
+				{
+					pointer begin_new, end_new;
+					begin_new = end_new = alloc.allocate(n);
+					if (!empty())
+					{
+						for(; __begin_ != __end_; __begin_++, end_new++)
+							alloc.construct(end_new, *__begin_);
+					}
+					~vector();
+					__begin_ = begin_new;
+					__end_ = end_new;
+					__end_cap_ = __begin_ + n;
+				}
 			}
 
-			const_reference front(void) const
+			template<class InputIt>
+			void assign(InputIt first, InputIt last);
+
+			void assign(size_type count, const T &value)
 			{
-				return (*__begin_);
-			}
+				if (count > capacity())
 
-			reference back(void)
-			{
-				return (*(__end_ - 1));
 			}
-
-			const_reference back(void) const
-			{
-				return (*(__end_ - 1));
-			}
-
-			allocator_type get_allocator(void) const
-			{
-				return (__alloc_);
-			}
-
-			// operator = {assign(begin, end)}
 	};
 }

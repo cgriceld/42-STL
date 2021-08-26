@@ -7,15 +7,34 @@
 int main(void)
 {
 	int arr[] = {1, 2, 3, 4, 5};
+	int arr1[] = {6, 7, 8};
 	std::vector<int> v(arr, arr + 5);
-	try
-	{
-		std::cout << v.at(21);
-	}
-	catch(const std::exception& e)
-	{
-		std::cerr << e.what() << '\n';
-	}
+	std::vector<int> v1(arr1, arr + 3);
+
+	v1.assign(v.begin(), v.end());
+	for(std::vector<int>::iterator i = v1.begin(); i != v1.end(); i++)
+		std::cout << *i << " ";
+
+	// std::cout << v.size() << std::endl;
+	// std::cout << v.capacity() << std::endl;
+
+	// std::vector<int>::iterator it = v.end() - 1;
+	// std::vector<int>::iterator it2 = v.end();
+
+	// std::cout << *it << std::endl;
+	// std::cout << *it2 << std::endl;
+	
+	// std::vector<int>::iterator it3 = v.erase(it, it2);
+	// std::cout << *it3 << std::endl;
+
+	// for(std::vector<int>::iterator i = v.begin(); i != v.end(); i++)
+	// 	std::cout << *i << " ";
+
+	// std::cout << std::endl << *it << std::endl;
+	// std::cout << *it2 << std::endl;
+	
+	// std::cout << v.size() << std::endl;
+	// std::cout << v.capacity() << std::endl;
 	
 	
 	// std::vector<int>::reverse_iterator itr = v.rbegin();
