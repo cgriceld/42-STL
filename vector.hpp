@@ -24,7 +24,7 @@ namespace ft
 		
 		protected:
 			pointer __begin_;
-			pointer __end_;
+			pointer __end_; // past-the-one elem
 			pointer __end_cap_;
 			allocator_type __alloc_;
 
@@ -41,7 +41,7 @@ namespace ft
 				__begin_ = __end_ = alloc.allocate(n);
 				for (size_t i = 0; i < n; i++)
 					alloc.construct(__end_++, val);
-				__end_cap_ = --__end_;
+				__end_cap_ = __end_;
 			}
 
 			// template <class InputIterator> vector (InputIterator first, InputIterator last,
@@ -83,10 +83,7 @@ namespace ft
 
 		// ========================== MEMBER FUNCTIONS ========================== //
 
-			void clear(void)
-			{
-				
-			}
+		// ---------------- ACCESS / INFO ---------------- //
 
 			reference at (size_type n)
 			{
