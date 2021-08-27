@@ -1,7 +1,9 @@
 #pragma once
 
 #include <memory>
+#include <algorithm>
 #include "iterator.hpp"
+#include "utils.hpp"
 
 namespace ft
 {
@@ -63,7 +65,7 @@ namespace ft
 				if (__end_ + n > __end_cap_)
 				{
 					difference_type index = position - __begin_;
-					realloc(size() + n);
+					realloc(std::max(size() + n, capacity() * 2);
 					position = __begin_ + index;
 				}
 				for (difference_type move = __end_ - position - 1; move-- >= 0)
@@ -72,6 +74,14 @@ namespace ft
 					alloc.construct(position + move + 1, *(position + move));
 				}
 				__end_ += n;
+			}
+
+			void constr_range(iterator first, iterator last)
+			{
+				size_t count = static_cast<size_type>(last - first);
+				__begin_ = alloc.allocate(count);
+				range_init(__begin_, first, last);
+				__end_cap_ = __end_ += count;
 			}
 
 		public:
@@ -84,16 +94,21 @@ namespace ft
 			explicit vector (size_type n, const value_type &val = value_type(),
 			const allocator_type &alloc = allocator_type()) : __alloc_(alloc)
 			{
-				__begin_ = __end_ = alloc.allocate(n);
-				for (size_t i = 0; i < n; i++)
-					alloc.construct(__end_++, val);
-				__end_cap_ = __end_;
+				__begin_ = alloc.allocate(n);
+				val_init(__begin_, n, val);
+				__end_cap_ = __end_ += n;
 			}
 
-			// template <class InputIterator> vector (InputIterator first, InputIterator last,
-			// const allocator_type& alloc = allocator_type());
+			template <class InputIterator>
+			vector (InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type())  : __alloc_(alloc)
+			{
+				constr_range(first, last);
+			}
 
-			// vector (const vector& x);
+			vector (const vector &x) : __alloc_(x.alloc)
+			{
+				constr_range(x.begin(), x.end());
+			}
 
 			~vector() 
 			{
@@ -102,7 +117,13 @@ namespace ft
 			}
 
 		// ========================== OPERATORS ========================== //
-			// operator = {assign(begin, end)}
+
+			vector &operator = (const vector &x)
+			{
+				if (this != &x)
+					assign(x.begin(), x.end());
+				return (*this);
+			};
 
 			reference operator[] (size_type n) { return (__begin_[n]); };
 
@@ -236,5 +257,36 @@ namespace ft
 				if (n > capacity())
 					realloc(n);
 			}
+
+			void push_back (const value_type &val)
+			{
+				insert(end(), val);
+			}
+
+			void swap (vector &x)
+			{
+				std::swap(__begin_, x.__begin_);
+				std::swap(__end_, x.__end_);
+				std::swap(__end_cap_, x.__end_cap_);
+				std::swap(__alloc_, x.__alloc_);
+			}
 	};
+
+	template <class T, class Alloc>
+	void swap (vector<T, Alloc> &x, vector<T, Alloc> &y)
+	{
+		x.swap(y);
+	}
+
+	template<class T, class Alloc >
+	bool operator == (const std::vector<T, Alloc> &lhs, const std::vector<T, Alloc> &rhs)
+	{
+		return (lhs.size() == rhs.size() && ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
+	}
+
+	template<class T, class Alloc>
+	bool operator != (const std::vector<T, Alloc> &lhs, const std::vector<T, Alloc> &rhs)
+	{
+		return (!(lhs == rhs));
+	}
 }

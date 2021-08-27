@@ -7,9 +7,12 @@
 int main(void)
 {
 	int arr[] = {1, 2, 3, 4, 5};
-	int arr1[] = {6, 7, 8};
+	int arr1[] = {6, 7, 8, 9, 10, 11};
 	std::vector<int> v(arr, arr + 5);
-	std::vector<int> v1(arr1, arr1 + 3);
+	std::vector<int> v1(arr1, arr1 + 6);
+
+	std::vector<int> v2(0, 7);
+	std::cout << v2.size() << " " << v2.capacity() << std::endl;
 
 	// std::vector<int> v3;
 
@@ -18,11 +21,13 @@ int main(void)
 	// for(std::vector<int>::iterator i = v1.begin(); i != v1.end(); i++)
 	// 	std::cout << *i << " ";
 
-	std::cout << v1.capacity() << std::endl;
-	v1.push_back(9);
-	std::cout << v1.capacity() << std::endl;
-	for(std::vector<int>::iterator i = v1.begin(); i != v1.end(); i++)
-		std::cout << *i << " ";
+	// std::cout << v.capacity() << std::endl;
+	// v = v1;
+	// std::cout << v.capacity() << std::endl;
+	// for(std::vector<int>::iterator i = v.begin(); i != v.end(); i++)
+	// 	std::cout << *i << " ";
+	// for(std::vector<int>::iterator i = v1.begin(); i != v1.end(); i++)
+	// 	std::cout << *i << " ";
 
 	// std::cout << v.size() << std::endl;
 	// std::cout << v.capacity() << std::endl;
