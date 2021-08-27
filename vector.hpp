@@ -28,6 +28,52 @@ namespace ft
 			pointer __end_cap_;
 			allocator_type __alloc_;
 
+		private:
+			void realloc(size_type n)
+			{
+				pointer begin_new, end_new;
+				begin_new = end_new = alloc.allocate(n);
+				if (!empty())
+				{
+					for(; __begin_ != __end_; __begin_++, end_new++)
+						alloc.construct(end_new, *__begin_);
+				}
+				~vector();
+				__begin_ = begin_new;
+				__end_ = end_new;
+				__end_cap_ = __begin_ + n;
+			}
+
+			void range_init(iterator position, iterator first, iterator last)
+			{
+				for(; first != last; position++, first++)
+					alloc.construct(position, *first);
+			}
+
+			void val_init(iterator position, size_type n, const value_type &val)
+			{
+				for(size_t i = 0; i < n; position++)
+					alloc.construct(position, val);
+			}
+
+			void insert_shared(iterator position, size_type n)
+			{
+				if (!n)
+					return;
+				if (__end_ + n > __end_cap_)
+				{
+					difference_type index = position - __begin_;
+					realloc(size() + n);
+					position = __begin_ + index;
+				}
+				for (difference_type move = __end_ - position - 1; move-- >= 0)
+				{
+					alloc.destroy(position + move);
+					alloc.construct(position + move + 1, *(position + move));
+				}
+				__end_ += n;
+			}
+
 		public:
 
 		// ========================== CONSTRUCTORS & DESTRUCTOR ========================== //
@@ -121,7 +167,7 @@ namespace ft
 				difference_type diff = last - first;
 				for(; first != last; first++)
 					alloc.destroy(first);
-				if (; last != __end_; last++)
+				for (; last != __end_; last++)
 				{
 					alloc.construct(last - diff, *last);
 					alloc.destroy(last);
@@ -139,14 +185,42 @@ namespace ft
 			template <class InputIterator>
 			void insert (iterator position, InputIterator first, InputIterator last)
 			{
-
+				insert_shared(position, last - first);
+				range_init(position, first, last);
 			}
 
-			void insert (iterator position, size_type n, const value_type &val);
+			void insert (iterator position, size_type n, const value_type &val)
+			{
+				insert_shared(position, n);
+				val_init(position, n, val);
+			}
 
 			iterator insert (iterator position, const value_type &val)
 			{
-				
+				insert(position, 1, val);
+				return (position);
+			}
+
+			template<class InputIt>
+			void assign(InputIt first, InputIt last)
+			{
+				size_t count = static_cast<size_type>(last - first);
+				if (!count)
+					return;
+				clear();
+				reserve(count);
+				range_init(__begin_, first, last);
+				__end_ += count;
+			}
+
+			void assign(size_type count, const T &value)
+			{
+				if (!count)
+					return;
+				clear();
+				reserve(count);
+				val_init(__begin_, count, value);
+				__end_ += count;
 			}
 
 			void resize (size_type n, value_type val = value_type())
@@ -154,34 +228,13 @@ namespace ft
 				if (n < size())
 					erase(__begin_ + n, __end_);
 				else
-					insert(end(), val);
+					insert(end(), n, val);
 			}
 
 			void reserve (size_type n)
 			{
 				if (n > capacity())
-				{
-					pointer begin_new, end_new;
-					begin_new = end_new = alloc.allocate(n);
-					if (!empty())
-					{
-						for(; __begin_ != __end_; __begin_++, end_new++)
-							alloc.construct(end_new, *__begin_);
-					}
-					~vector();
-					__begin_ = begin_new;
-					__end_ = end_new;
-					__end_cap_ = __begin_ + n;
-				}
-			}
-
-			template<class InputIt>
-			void assign(InputIt first, InputIt last);
-
-			void assign(size_type count, const T &value)
-			{
-				if (count > capacity())
-
+					realloc(n);
 			}
 	};
 }
