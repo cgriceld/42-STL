@@ -337,51 +337,52 @@ namespace ft
 				_current += __n;
 				return (*this);
 			};
+		};
 
 		template<class Iterator1, class Iterator2>
-		bool operator == (const std::reverse_iterator<Iterator1> &lhs,
+		bool operator == (const std::reverse_iterator<Iterator1> &lhs, \
 						const std::reverse_iterator<Iterator2> &rhs)
 		{
 			return (lhs.base() == rhs.base());
 		};
 
 		template<class Iterator1, class Iterator2>
-		bool operator != (const std::reverse_iterator<Iterator1> &lhs,
+		bool operator != (const std::reverse_iterator<Iterator1> &lhs, \
 						const std::reverse_iterator<Iterator2> &rhs)
 		{
 			return (lhs.base() != rhs.base());
 		}
 
 		template<class Iterator1, class Iterator2>
-		bool operator < (const std::reverse_iterator<Iterator1> &lhs,
+		bool operator < (const std::reverse_iterator<Iterator1> &lhs, \
 						const std::reverse_iterator<Iterator2> &rhs)
 		{
 			return (lhs.base() > rhs.base());
 		}
 
 		template<class Iterator1, class Iterator2>
-		bool operator <= (const std::reverse_iterator<Iterator1> &lhs,
+		bool operator <= (const std::reverse_iterator<Iterator1> &lhs, \
 						const std::reverse_iterator<Iterator2> &rhs)
 		{
 			return (lhs.base() >= rhs.base());
 		}
 
 		template<class Iterator1, class Iterator2>
-		bool operator > (const std::reverse_iterator<Iterator1> &lhs,
+		bool operator > (const std::reverse_iterator<Iterator1> &lhs, \
 						const std::reverse_iterator<Iterator2> &rhs)
 		{
 			return (lhs.base() < rhs.base());
 		}
 
 		template<class Iterator1, class Iterator2>
-		bool operator >= (const std::reverse_iterator<Iterator1> &lhs,
+		bool operator >= (const std::reverse_iterator<Iterator1> &lhs, \
 						const std::reverse_iterator<Iterator2> &rhs)
 		{
 			return (lhs.base() <= rhs.base());
 		}
 
 		template<class Iter> 
-		reverse_iterator<Iter> operator + (typename reverse_iterator<Iter>::difference_type n,
+		reverse_iterator<Iter> operator + (typename reverse_iterator<Iter>::difference_type n, \
 										const reverse_iterator<Iter> &it)
 		{
 			return (it.base() - n);
@@ -400,5 +401,4 @@ namespace ft
 		{
 			return (rhs.base() - lhs.base());
 		}
-	};
 }

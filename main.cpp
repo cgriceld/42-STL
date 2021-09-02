@@ -6,13 +6,17 @@
 
 int main(void)
 {
-	int arr[] = {1, 2, 3, 4, 5};
-	int arr1[] = {6, 7, 8, 9, 10, 11};
-	std::vector<int> v(arr, arr + 5);
-	std::vector<int> v1(arr1, arr1 + 6);
+	std::vector<int> e(0);
+	std::cout << e.capacity() << " " << e.size() << std::endl;
+	//std::cout << (NULL - NULL) << std::endl;
 
-	std::vector<int> v2(0, 7);
-	std::cout << v2.size() << " " << v2.capacity() << std::endl;
+	// int arr[] = {1, 2, 3, 4, 5};
+	// int arr1[] = {6, 7, 8, 9, 10, 11};
+	// std::vector<int> v(arr, arr + 5);
+	// std::vector<int> v1(arr1, arr1 + 6);
+
+	// std::vector<int> v2(0, 7);
+	// std::cout << v2.size() << " " << v2.capacity() << std::endl;
 
 	// std::vector<int> v3;
 

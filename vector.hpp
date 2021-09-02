@@ -34,11 +34,11 @@ namespace ft
 			void realloc(size_type n)
 			{
 				pointer begin_new, end_new;
-				begin_new = end_new = alloc.allocate(n);
+				begin_new = end_new = __alloc_.allocate(n);
 				if (!empty())
 				{
 					for(; __begin_ != __end_; __begin_++, end_new++)
-						alloc.construct(end_new, *__begin_);
+						__alloc_.construct(end_new, *__begin_);
 				}
 				~vector();
 				__begin_ = begin_new;
@@ -48,14 +48,14 @@ namespace ft
 
 			void range_init(iterator position, iterator first, iterator last)
 			{
-				for(; first != last; position++, first++)
-					alloc.construct(position, *first);
+				for (; first != last; position++, first++)
+					__alloc_.construct(position, *first);
 			}
 
 			void val_init(iterator position, size_type n, const value_type &val)
 			{
-				for(size_t i = 0; i < n; position++)
-					alloc.construct(position, val);
+				for (size_t i = 0; i < n; position++)
+					__alloc_.construct(position, val);
 			}
 
 			void insert_shared(iterator position, size_type n)
@@ -65,13 +65,13 @@ namespace ft
 				if (__end_ + n > __end_cap_)
 				{
 					difference_type index = position - __begin_;
-					realloc(std::max(size() + n, capacity() * 2);
+					realloc(std::max(size() + n, capacity() * 2));
 					position = __begin_ + index;
 				}
-				for (difference_type move = __end_ - position - 1; move-- >= 0)
+				for (difference_type move = __end_ - position - 1; move>= 0; move--)
 				{
-					alloc.destroy(position + move);
-					alloc.construct(position + move + 1, *(position + move));
+					__alloc_.destroy(position + move);
+					__alloc_.construct(position + move + 1, *(position + move));
 				}
 				__end_ += n;
 			}
@@ -79,7 +79,7 @@ namespace ft
 			void constr_range(iterator first, iterator last)
 			{
 				size_t count = static_cast<size_type>(last - first);
-				__begin_ = alloc.allocate(count);
+				__begin_ = __alloc_.allocate(count);
 				range_init(__begin_, first, last);
 				__end_cap_ = __end_ += count;
 			}
@@ -94,7 +94,7 @@ namespace ft
 			explicit vector (size_type n, const value_type &val = value_type(),
 			const allocator_type &alloc = allocator_type()) : __alloc_(alloc)
 			{
-				__begin_ = alloc.allocate(n);
+				__begin_ = __alloc_.allocate(n);
 				val_init(__begin_, n, val);
 				__end_cap_ = __end_ += n;
 			}
@@ -113,7 +113,7 @@ namespace ft
 			~vector() 
 			{
 				clear();
-				alloc.deallocate(__begin_, capacity());
+				__alloc_.deallocate(__begin_, capacity());
 			}
 
 		// ========================== OPERATORS ========================== //
@@ -187,11 +187,11 @@ namespace ft
 					return;
 				difference_type diff = last - first;
 				for(; first != last; first++)
-					alloc.destroy(first);
+					__alloc_.destroy(first);
 				for (; last != __end_; last++)
 				{
-					alloc.construct(last - diff, *last);
-					alloc.destroy(last);
+					__alloc_.construct(last - diff, *last);
+					__alloc_.destroy(last);
 				}
 				__end_ -= diff;
 				return (first);
