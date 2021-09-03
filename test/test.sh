@@ -20,7 +20,7 @@ function change_space()
 
 function check()
 {
-	diff std_$1.txt ft_$1.txt > log_$1.txt && echo -e "✅ $GREEN TEST PASSED ! $WHITE" || echo "❌ $RED ERROR, CHECK OUT log_$1.txt FILE ! $WHITE"
+	diff std_$1.txt ft_$1.txt > log_$1.txt && echo -e "✅ $GREEN TEST PASSED ! $WHITE" || echo -e "❌ $RED ERROR, CHECK OUT log_$1.txt FILE ! $WHITE"
 	if [ ! -s log_$1.txt ]
 	then
 		rm log_$1.txt

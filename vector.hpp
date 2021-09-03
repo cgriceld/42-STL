@@ -98,9 +98,9 @@ namespace ft
 				val_init(__begin_, n, val);
 				__end_cap_ = __end_ += n;
 			}
-
-			template <class InputIterator>
-			vector (InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type())  : __alloc_(alloc)
+			// not c++98!!
+			template <class InputIterator, ft::enable_if<ft::is_integral<InputIteratorr>::value, InputIterator> = true>
+			vector (InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type()): __alloc_(alloc)
 			{
 				constr_range(first, last);
 			}
@@ -279,14 +279,38 @@ namespace ft
 	}
 
 	template<class T, class Alloc >
-	bool operator == (const std::vector<T, Alloc> &lhs, const std::vector<T, Alloc> &rhs)
+	bool operator == (const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
 	{
 		return (lhs.size() == rhs.size() && ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
 	}
 
 	template<class T, class Alloc>
-	bool operator != (const std::vector<T, Alloc> &lhs, const std::vector<T, Alloc> &rhs)
+	bool operator != (const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
 	{
 		return (!(lhs == rhs));
+	}
+
+	template<class T, class Alloc>
+	bool operator < (const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
+	{
+		return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(). rhs.end()));
+	}
+
+	template<class T, class Alloc>
+	bool operator <= (const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
+	{
+		return (!(rhs < lhs));
+	}
+
+	template<class T, class Alloc>
+	bool operator > (const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
+	{
+		return (rhs < lhs);
+	}
+
+	template<class T, class Alloc>
+	bool operator >= (const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
+	{
+		return (!(lhs < rhs));
 	}
 }

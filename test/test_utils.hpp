@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
 #include "../vector.hpp"
 
 template <typename T>
