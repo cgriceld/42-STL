@@ -70,7 +70,7 @@ namespace ft
 		// ---------------- CONSTRUCTORS & DESTRUCTOR ---------------- //
 
 			v_iterator() : _current(NULL) {};
-			explicit v_iterator(pointer current) : _current(current) {};
+			v_iterator(pointer current) : _current(current) {};
 			v_iterator(const v_iterator &copy) : _current(copy._current) {};
 
 			v_iterator &operator = (const v_iterator &copy)

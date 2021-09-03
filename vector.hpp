@@ -26,7 +26,7 @@ namespace ft
 		
 		protected:
 			pointer __begin_;
-			pointer __end_; // past-the-one elem
+			pointer __end_;
 			pointer __end_cap_;
 			allocator_type __alloc_;
 
@@ -46,19 +46,19 @@ namespace ft
 				__end_cap_ = __begin_ + n;
 			}
 
-			void range_init(iterator position, iterator first, iterator last)
+			void range_init(pointer position, iterator first, iterator last)
 			{
 				for (; first != last; position++, first++)
 					__alloc_.construct(position, *first);
 			}
 
-			void val_init(iterator position, size_type n, const value_type &val)
+			void val_init(pointer position, size_type n, const value_type &val)
 			{
-				for (size_t i = 0; i < n; position++)
+				for (size_t i = 0; i < n; position++, i++)
 					__alloc_.construct(position, val);
 			}
 
-			void insert_shared(iterator position, size_type n)
+			void insert_shared(pointer position, size_type n)
 			{
 				if (!n)
 					return;
@@ -184,14 +184,14 @@ namespace ft
 			iterator erase (iterator first, iterator last)
 			{
 				if (first == last)
-					return;
+					return (NULL);
 				difference_type diff = last - first;
 				for(; first != last; first++)
-					__alloc_.destroy(first);
-				for (; last != __end_; last++)
+					__alloc_.destroy(first.base());
+				for (; last.base() != __end_; last++)
 				{
-					__alloc_.construct(last - diff, *last);
-					__alloc_.destroy(last);
+					__alloc_.construct((last - diff).base(), *last);
+					__alloc_.destroy(last.base());
 				}
 				__end_ -= diff;
 				return (first);
@@ -206,14 +206,14 @@ namespace ft
 			template <class InputIterator>
 			void insert (iterator position, InputIterator first, InputIterator last)
 			{
-				insert_shared(position, last - first);
-				range_init(position, first, last);
+				insert_shared(position.base(), last - first);
+				range_init(position.base(), first, last);
 			}
 
 			void insert (iterator position, size_type n, const value_type &val)
 			{
-				insert_shared(position, n);
-				val_init(position, n, val);
+				insert_shared(position.base(), n);
+				val_init(position.base(), n, val);
 			}
 
 			iterator insert (iterator position, const value_type &val)

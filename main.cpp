@@ -1,5 +1,4 @@
-// #include "vector.hpp"
-// #include "iterator.hpp"
+#include "vector.hpp"
 
 #include <iostream>
 #include <vector>
