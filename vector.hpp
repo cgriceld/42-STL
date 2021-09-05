@@ -96,11 +96,12 @@ namespace ft
 			{
 				__begin_ = __alloc_.allocate(n);
 				val_init(__begin_, n, val);
-				__end_cap_ = __end_ += n;
+				__end_cap_ = __end_ = __begin_ + n;
 			}
-			// not c++98!!
-			template <class InputIterator, ft::enable_if<ft::is_integral<InputIteratorr>::value, InputIterator> = true>
-			vector (InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type()): __alloc_(alloc)
+
+			template <class InputIterator>
+			vector (InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type(),
+					typename enable_if<!ft::is_integral<InputIterator>::value>::type* = 0): __alloc_(alloc)
 			{
 				constr_range(first, last);
 			}
@@ -131,17 +132,17 @@ namespace ft
 
 		// ========================== ITERATORS ========================== //
 
-			iterator begin(void) { return (__begin_); };
-			const_iterator begin(void) const { return (__begin_); };
+			iterator begin(void) { return (iterator(__begin_)); };
+			const_iterator begin(void) const { return (const_iterator(__begin_)); };
 
-			reverse_iterator rbegin(void) { return (__end_); };
-			const_reverse_iterator rbegin(void) const { return (__end_); };
+			reverse_iterator rbegin(void) { return (reverse_iterator(__end_)); };
+			const_reverse_iterator rbegin(void) const { return (const_reverse_iterator(__end_)); };
 
-			iterator end(void) { return (__end_); };
-			const_iterator end(void) const { return (__end_); };
+			iterator end(void) { return (iterator(__end_)); };
+			const_iterator end(void) const { return (const_iterator(__end_)); };
 
-			reverse_iterator rend(void) { return (__begin_); };
-			const_reverse_iterator rend(void) const { return (__begin_); };
+			reverse_iterator rend(void) { return (reverse_iterator(__begin_)); };
+			const_reverse_iterator rend(void) const { return (const_reverse_iterator(__begin_)); };
 
 		// ========================== MEMBER FUNCTIONS ========================== //
 
@@ -184,7 +185,7 @@ namespace ft
 			iterator erase (iterator first, iterator last)
 			{
 				if (first == last)
-					return (NULL);
+					return (first);
 				difference_type diff = last - first;
 				for(; first != last; first++)
 					__alloc_.destroy(first.base());
@@ -199,9 +200,9 @@ namespace ft
 
 			iterator erase (iterator position) { return (erase(position, position + 1)); };
 
-			void clear(void) { erase(__begin_, __end_); };
+			void clear(void) { erase(iterator(__begin_), iterator(__end_)); };
 
-			void pop_back(void) { erase(__end_ - 1, __end_); };
+			void pop_back(void) { erase(iterator(__end_ - 1), iterator(__end_)); };
 
 			template <class InputIterator>
 			void insert (iterator position, InputIterator first, InputIterator last)
@@ -247,7 +248,7 @@ namespace ft
 			void resize (size_type n, value_type val = value_type())
 			{
 				if (n < size())
-					erase(__begin_ + n, __end_);
+					erase(iterator(__begin_ + n), iterator(__end_));
 				else
 					insert(end(), n, val);
 			}

@@ -16,7 +16,7 @@ int main(void)
 		std::cout << v << s;
 	}
 	{
-		std::cout << "\nSIZE, VALUE INIT\n";
+		std::cout << "\nFILL VALUE\n";
 		ft::vector<int> v(5, 10);
 		std::cout << v;
 	}

@@ -114,7 +114,7 @@ namespace ft
 
 			v_iterator operator ++ (int)
 			{
-				return (_current++);
+				return (v_iterator(_current++));
 			}
 
 			v_iterator &operator += (difference_type __n)
@@ -125,7 +125,7 @@ namespace ft
 
 			v_iterator operator + (difference_type __n) const
 			{
-				return (_current + __n);
+				return (v_iterator(_current + __n));
 			}
 
 			// ---------------- MINUS ---------------- //
@@ -138,7 +138,7 @@ namespace ft
 
 			v_iterator operator -- (int)
 			{
-				return (_current--);
+				return (v_iterator(_current--));
 			}
 
 			v_iterator &operator -= (difference_type __n)
@@ -149,7 +149,7 @@ namespace ft
 
 			v_iterator operator - (difference_type __n) const
 			{
-				return (_current - __n);
+				return (v_iterator(_current - __n));
 			}
 		
 		private:
