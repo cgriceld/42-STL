@@ -46,19 +46,22 @@ namespace ft
 				__end_cap_ = __begin_ + n;
 			}
 
-			void range_init(pointer position, iterator first, iterator last)
+			template <typename T1, typename T2>
+			void range_init(T1 position, T2 first, T2 last)
 			{
 				for (; first != last; position++, first++)
 					__alloc_.construct(position, *first);
 			}
 
-			void val_init(pointer position, size_type n, const value_type &val)
+			template <typename M>
+			void val_init(M position, size_type n, const value_type &val)
 			{
 				for (size_t i = 0; i < n; position++, i++)
 					__alloc_.construct(position, val);
 			}
 
-			void insert_shared(pointer position, size_type n)
+			template <typename M>
+			void insert_shared(M position, size_type n)
 			{
 				if (!n)
 					return;
@@ -76,7 +79,8 @@ namespace ft
 				__end_ += n;
 			}
 
-			void constr_range(iterator first, iterator last)
+			template <typename M>
+			void constr_range(M first, M last)
 			{
 				size_t count = static_cast<size_type>(last - first);
 				__begin_ = __alloc_.allocate(count);
@@ -207,14 +211,14 @@ namespace ft
 			template <class InputIterator>
 			void insert (iterator position, InputIterator first, InputIterator last)
 			{
-				insert_shared(position.base(), last - first);
-				range_init(position.base(), first, last);
+				insert_shared(position, last - first);
+				range_init(position, first, last);
 			}
 
 			void insert (iterator position, size_type n, const value_type &val)
 			{
-				insert_shared(position.base(), n);
-				val_init(position.base(), n, val);
+				insert_shared(position, n);
+				val_init(position, n, val);
 			}
 
 			iterator insert (iterator position, const value_type &val)
