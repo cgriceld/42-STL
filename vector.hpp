@@ -40,7 +40,7 @@ namespace ft
 					for(; __begin_ != __end_; __begin_++, end_new++)
 						__alloc_.construct(end_new, *__begin_);
 				}
-				~vector();
+				this->~vector();
 				__begin_ = begin_new;
 				__end_ = end_new;
 				__end_cap_ = __begin_ + n;
@@ -110,7 +110,7 @@ namespace ft
 				constr_range(first, last);
 			}
 
-			vector (const vector &x) : __alloc_(x.alloc)
+			vector (const vector &x) : __alloc_(x.__alloc_)
 			{
 				constr_range(x.begin(), x.end());
 			}
@@ -139,14 +139,14 @@ namespace ft
 			iterator begin(void) { return (iterator(__begin_)); };
 			const_iterator begin(void) const { return (const_iterator(__begin_)); };
 
-			reverse_iterator rbegin(void) { return (reverse_iterator(__end_)); };
-			const_reverse_iterator rbegin(void) const { return (const_reverse_iterator(__end_)); };
+			reverse_iterator rbegin(void) { return (reverse_iterator(end())); };
+			const_reverse_iterator rbegin(void) const { return (const_reverse_iterator(end())); };
 
 			iterator end(void) { return (iterator(__end_)); };
 			const_iterator end(void) const { return (const_iterator(__end_)); };
 
-			reverse_iterator rend(void) { return (reverse_iterator(__begin_)); };
-			const_reverse_iterator rend(void) const { return (const_reverse_iterator(__begin_)); };
+			reverse_iterator rend(void) { return (reverse_iterator(begin()--)); };
+			const_reverse_iterator rend(void) const { return (const_reverse_iterator(begin()--)); };
 
 		// ========================== MEMBER FUNCTIONS ========================== //
 
@@ -155,14 +155,14 @@ namespace ft
 			reference at (size_type n)
 			{
 				if (n < 0 || n >= size())
-					throw std::out_of_range("index is out of range");
+					throw std::out_of_range("vector");
 				return (__begin_[n]);
 			}
 
 			const_reference at (size_type n) const
 			{
 				if (n < 0 || n >= size())
-					throw std::out_of_range("index is out of range");
+					throw std::out_of_range("vector");
 				return (__begin_[n]);
 			}
 

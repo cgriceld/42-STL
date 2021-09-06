@@ -9,8 +9,15 @@ int main(void)
 	int arr[] = {1, 2, 3, 4, 5};
 	//int arr1[] = {6, 7, 8, 9, 10, 11};
 	std::vector<int> v(arr, arr + 5);
-	auto it = v.erase(v.begin(), v.begin());
-	std::cout << *it << std::endl;
+	try
+	{
+		std::cout << v.at(-12);
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
+	
 	//std::vector<int> v1(arr1, arr1 + 6);
 
 	// std::vector<int> v2(0, 7);

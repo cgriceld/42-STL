@@ -39,7 +39,7 @@ change_space ft std vector
 run std vector
 change_space std ft vector
 
-./std_vector_test > std_vector.txt
-./ft_vector_test > ft_vector.txt
+./std_vector_test > std_vector.txt 2>&1
+./ft_vector_test > ft_vector.txt 2>&1
 
 check vector
