@@ -60,6 +60,13 @@ namespace ft
 					__alloc_.construct(position, val);
 			}
 
+			void assign_shared(size_t count)
+			{
+				clear();
+				reserve(count);
+				__end_ += count;
+			}
+
 			template <typename M>
 			void insert_shared(M position, size_type n)
 			{
@@ -87,6 +94,7 @@ namespace ft
 				range_init(__begin_, first, last);
 				__end_cap_ = __end_ = __begin_ + count;
 			}
+
 
 		public:
 
@@ -209,7 +217,8 @@ namespace ft
 			void pop_back(void) { erase(iterator(__end_ - 1), iterator(__end_)); };
 
 			template <class InputIterator>
-			void insert (iterator position, InputIterator first, InputIterator last)
+			void insert (iterator position, InputIterator first, InputIterator last, \
+					typename enable_if<!ft::is_integral<InputIterator>::value>::type* = 0)
 			{
 				insert_shared(position, last - first);
 				range_init(position, first, last);
@@ -228,27 +237,18 @@ namespace ft
 			}
 
 			template<class InputIt>
-			void assign(InputIt first, InputIt last)
+			void assign(InputIt first, InputIt last, typename enable_if<!ft::is_integral<InputIt>::value>::type* = 0)
 			{
-				size_t count = static_cast<size_type>(last - first);
-				if (!count)
-					return;
-				clear();
-				reserve(count);
+				assign_shared(static_cast<size_type>(last - first));
 				range_init(__begin_, first, last);
-				__end_ += count;
 			}
 
 			void assign(size_type count, const T &value)
 			{
-				if (!count)
-					return;
-				clear();
-				reserve(count);
+				assign_shared(count);
 				val_init(__begin_, count, value);
-				__end_ += count;
 			}
-
+//via ternary
 			void resize (size_type n, value_type val = value_type())
 			{
 				if (n < size())

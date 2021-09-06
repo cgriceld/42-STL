@@ -24,8 +24,8 @@ int main(void)
 	}
 
 	int arr[] = {1, -2, 3, 6, 21, 0, 9};
-	ft::vector<int> std_v(arr, arr + 7);
-	ft::vector<int> v_iter(std_v.begin(), std_v.end());
+	ft::vector<int> ptr_v(arr, arr + 7);
+	ft::vector<int> v_iter(ptr_v.begin(), ptr_v.end());
 
 	{
 		std::cout << "\n\n\033[0;36mFILL RANGE\n\n\033[0m";
@@ -34,11 +34,11 @@ int main(void)
 		std::cout << "fill by pointers : \n";
 		traverse(v_arr, v_arr.begin(), v_arr.end());
 
-		std::cout << "\nstd vector range iterators : \n";
+		std::cout << "\nvector range iterators : \n";
 		traverse(v_iter, v_iter.begin(), v_iter.end());
 
-		ft::vector<int> v_iter_same(std_v.begin(), std_v.begin());
-		std::cout << "\nstd vector same iterators : \n";
+		ft::vector<int> v_iter_same(ptr_v.begin(), ptr_v.begin());
+		std::cout << "\nvector same iterators : \n";
 		traverse(v_iter_same, v_iter_same.begin(), v_iter_same.end());
 
 		std::cout << "\n\n\033[0;36mCOPY & =\n\n\033[0m";
@@ -100,6 +100,39 @@ int main(void)
 	iterator_test(v_iter.begin() + 3);
 	std::cout << "\n\033[0;36mREVERSE ITERATOR TEST\033[0m\n";
 	iterator_test(v_iter.rbegin() + 3);
+
+	std::cout << "\n\n\033[1;33m============= ASSIGN TESTS =============\033[0m\n\n";
+	{
+		std::cout << "\033[0;36mEMPTY VECTOR\n\033[0m";
+		ft::vector<int> v;
+		std::cout << "\nassign(0, 6) : \n";
+		v.assign(0, 6);
+		traverse(v, v.begin(), v.end());
+		std::cout << "\nassign(3, 4) : \n";
+		v.assign(3, 4);
+		traverse(v, v.begin(), v.end());
+		std::cout << "\nassign(1, 1) : \n";
+		v.assign(1, 1);
+		traverse(v, v.begin(), v.end());
+
+		std::cout << "\033[0;36m\nNOT EMPTY VECTOR\n\033[0m";
+		int arr[] = {13, 21, 42, 7, -9};
+		int arr1[] = {3, 4, 0, -1, 1, 11};
+		ft::vector<int> r(arr, arr + 5);
+		ft::vector<int> r1(arr1, arr1 + 6);
+		traverse(r, r.begin(), r.end());
+		std::cout << "\nassign(arr + 1, arr + 4) : \n";
+		r.assign(arr + 1, arr + 4);
+		traverse(r, r.begin(), r.end());
+		std::cout << "\nassign(arr, arr) : \n";
+		r.assign(arr, arr);
+		traverse(r, r.begin(), r.end());
+		std::cout << "\nassign(r1.begin(), r1.end()) : \n";
+		r.assign(r1.begin(), r1.end());
+		traverse(r, r.begin(), r.end());
+		r.assign(0, 0);
+		traverse(r, r.begin(), r.end());
+	}
 
 	return (0);
 }

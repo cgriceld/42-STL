@@ -106,12 +106,14 @@ namespace ft
 
 		// ---------------- PLUS ---------------- //
 
+			// ++ptr
 			v_iterator &operator ++ (void)
 			{
 				++_current;
 				return (*this);
 			}
 
+			// ptr++
 			v_iterator operator ++ (int)
 			{
 				return (v_iterator(_current++));
