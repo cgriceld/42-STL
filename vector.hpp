@@ -81,7 +81,7 @@ namespace ft
 				size_t count = static_cast<size_type>(last - first);
 				__begin_ = __alloc_.allocate(count);
 				range_init(__begin_, first, last);
-				__end_cap_ = __end_ += count;
+				__end_cap_ = __end_ = __begin_ + count;
 			}
 
 		public:

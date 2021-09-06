@@ -5,6 +5,7 @@ GREEN="\033[1;32m"
 YELLOW_BOLD="\033[1;33m"
 YELLOW="\033[0;33m"
 RED="\033[1;31m"
+CYAN="\033[0;36m"
 
 FLAGS="-Wall -Wextra -Werror -std=c++98"
 
@@ -25,10 +26,13 @@ function check()
 	then
 		rm log_$1.txt
 	fi
+	echo -e "⏰ $CYAN TIME TEST "
+	echo "std : " `(time ./std_vector_test) 2>&1 | grep real | cut -f 2`
+	echo -e "ft :  " `(time ./ft_vector_test) 2>&1 | grep real | cut -f 2` $WHITE
 }
 
 echo -e "\n $YELLOW_BOLD ============== VECTOR TEST ============== \n"
-echo -e "$YELLOW Runs tests first with ft::, then change to std::, runs tests again and compare outputs $WHITE"
+echo -e "$YELLOW Runs tests first with ft::, then change to std::, runs same tests again and compare outputs $WHITE"
 
 run ft vector
 change_space ft std vector

@@ -21,6 +21,5 @@ int main(void)
 		std::cout << v;
 	}
 
-
 	return (0);
 }
