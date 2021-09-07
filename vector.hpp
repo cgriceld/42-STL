@@ -197,7 +197,7 @@ namespace ft
 			iterator erase (iterator first, iterator last)
 			{
 				if (first == last)
-					return (first);
+					return (last);
 				difference_type diff = last - first;
 				for(; first != last; first++)
 					__alloc_.destroy(first.base());
@@ -207,7 +207,7 @@ namespace ft
 					__alloc_.destroy(last.base());
 				}
 				__end_ -= diff;
-				return (first);
+				return (first - diff);
 			}
 
 			iterator erase (iterator position) { return (erase(position, position + 1)); };

@@ -6,17 +6,16 @@
 
 int main(void)
 {
-	int arr[] = {1, 2, 3, 4, 5};
-	//int arr1[] = {6, 7, 8, 9, 10, 11};
-	std::vector<int> v(arr, arr + 5);
-	try
-	{
-		std::cout << v.at(-12);
-	}
-	catch(const std::exception& e)
-	{
-		std::cerr << e.what() << '\n';
-	}
+	// int arr[] = {1, 2, 3, 4};
+	// std::vector<int> v(arr, arr + 4);
+	std::vector<int> v;
+	auto it = v.erase(v.begin(), v.end());
+	if (!it.base())
+		std::cout << "null\n";
+	// std::cout << *it << "\n";
+	// for (auto it = v.begin(); it != v.end(); it++)
+	// 	std::cout << *it;
+	// std::cout << std::endl;
 	
 	//std::vector<int> v1(arr1, arr1 + 6);
 

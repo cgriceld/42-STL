@@ -100,7 +100,6 @@ int main(void)
 	iterator_test(v_iter.begin() + 3);
 	std::cout << "\n\033[0;36mREVERSE ITERATOR TEST\033[0m\n";
 	iterator_test(v_iter.rbegin() + 3);
-
 	std::cout << "\n\n\033[1;33m============= ASSIGN TESTS =============\033[0m\n\n";
 	{
 		std::cout << "\033[0;36mEMPTY VECTOR\n\033[0m";
@@ -131,6 +130,47 @@ int main(void)
 		r.assign(r1.begin(), r1.end());
 		traverse(r, r.begin(), r.end());
 		r.assign(0, 0);
+		traverse(r, r.begin(), r.end());
+	}
+
+	std::cout << "\n\n\033[1;33m============= ERASE TESTS =============\033[0m\n\n";
+	{
+		std::cout << "\033[0;36mEMPTY VECTOR\n\033[0m";
+
+		ft::vector<int> v;
+		std::cout << "\nerase(v.begin(), v.end()) : \n";
+		ft::vector<int>::iterator it = v.erase(v.begin(), v.end());
+		if (it == v.end())
+			std::cout << "correct\n";
+		traverse(v, v.begin(), v.end());
+
+		std::cout << "\033[0;36m\nNOT EMPTY VECTOR\n\033[0m";
+
+		int arr[] = {13, 21, 42, 7, -9, 42, 28, 10, -5};
+		ft::vector<int> r(arr, arr + 9);
+		traverse(r, r.begin(), r.end());
+		std::cout << "\nerase(r.end() - 1) : \n";
+		it = r.erase(r.end() - 1);
+		if (it == r.end())
+			std::cout << "correct\n";
+		traverse(r, r.begin(), r.end());
+
+		std::cout << "\nerase(r.begin() + 1, r.begin() + 2) : \n";
+		it = r.erase(r.begin() + 1, r.begin() + 2);
+		if (it == r.begin() + 1)
+			std::cout << "correct\n";
+		traverse(r, r.begin(), r.end());
+
+		std::cout << "\nerase(r.begin(), r.begin() + 4) : \n";
+		it = r.erase(r.begin(), r.begin() + 4);
+		if (it == r.begin())
+			std::cout << "correct\n";
+		traverse(r, r.begin(), r.end());
+
+		std::cout << "\nerase(r.begin() + 1, r.end()) : \n";
+		it = r.erase(r.begin() + 1, r.end());
+		if (it == r.end())
+			std::cout << "correct\n";
 		traverse(r, r.begin(), r.end());
 	}
 
