@@ -245,13 +245,11 @@ namespace ft
 				assign_shared(count);
 				val_init(__begin_, count, value);
 			}
-//via ternary
+
 			void resize (size_type n, value_type val = value_type())
 			{
-				if (n < size())
-					erase(iterator(__begin_ + n), iterator(__end_));
-				else
-					insert(end(), n, val);
+				n < size() ? static_cast<void>(erase(iterator(__begin_ + n), iterator(__end_))) : \
+							insert(end(), n - size(), val);
 			}
 
 			void reserve (size_type n)

@@ -100,6 +100,7 @@ int main(void)
 	iterator_test(v_iter.begin() + 3);
 	std::cout << "\n\033[0;36mREVERSE ITERATOR TEST\033[0m\n";
 	iterator_test(v_iter.rbegin() + 3);
+
 	std::cout << "\n\n\033[1;33m============= ASSIGN TESTS =============\033[0m\n\n";
 	{
 		std::cout << "\033[0;36mEMPTY VECTOR\n\033[0m";
@@ -175,8 +176,8 @@ int main(void)
 	}
 
 	std::cout << "\n\n\033[1;33m============= INSERT TESTS =============\033[0m\n\n";
-
-	std::cout << "\033[0;36mEMPTY VECTOR\n\033[0m";
+	{
+		std::cout << "\033[0;36mEMPTY VECTOR\n\033[0m";
 
 		ft::vector<int> v;
 		std::cout << "\ninsert(v.begin(), 1) : \n";
@@ -232,6 +233,97 @@ int main(void)
 		std::cout << "\ninsert(v.begin() + 3, r.begin(), r.begin()) : \n";
 		v.insert(v.begin() + 3, r.begin(), r.begin());
 		traverse(v, v.begin(), v.end());
+	}
+
+	std::cout << "\n\n\033[1;33m============= RESIZE, RESERVE, PUSH_BACK & POP_BACK TESTS =============\033[0m\n\n";
+	{
+		ft::vector<int> v;
+		traverse(v, v.begin(), v.end());
+
+		std::cout << "\nv.reserve(0) : \n";
+		v.reserve(0);
+		traverse(v, v.begin(), v.end());
+
+		std::cout << "\nv.reserve(-1) : \n";
+		try
+		{
+			v.reserve(-1);
+		}
+		catch(const std::exception& e)
+		{
+			std::cerr << e.what() << '\n';
+		}
+
+		std::cout << "\nv.reserve(v.max_size() + 1) : \n";
+		try
+		{
+			v.reserve(v.max_size() + 1);
+		}
+		catch(const std::exception& e)
+		{
+			std::cerr << e.what() << '\n';
+		}
+
+		std::cout << "\nv.reserve(5) : \n";
+		v.reserve(5);
+		traverse(v, v.begin(), v.end());
+
+		std::cout << "\nv.push_back(5), v.push_back(7) : \n";
+		v.push_back(5);
+		v.push_back(7);
+		traverse(v, v.begin(), v.end());
+
+		std::cout << "\nv.reserve(4) : \n";
+		v.reserve(4);
+		traverse(v, v.begin(), v.end());
+
+		std::cout << "\nv.resize(4) : \n";
+		v.resize(4);
+		traverse(v, v.begin(), v.end());
+
+		std::cout << "\nv.resize(6) : \n";
+		v.resize(6);
+		traverse(v, v.begin(), v.end());
+
+		std::cout << "\nv.resize(1) : \n";
+		v.resize(1);
+		traverse(v, v.begin(), v.end());
+
+		std::cout << "\nv.reserve(0) : \n";
+		v.resize(1);
+		traverse(v, v.begin(), v.end());
+
+		std::cout << "\nv.push_back(11), v.push_back(2) : \n";
+		v.push_back(11);
+		v.push_back(2);
+		traverse(v, v.begin(), v.end());
+
+		std::cout << "\nv.pop_back() : \n";
+		v.pop_back();
+		traverse(v, v.begin(), v.end());
+
+		std::cout << "\nv.resize(0) : \n";
+		v.resize(0);
+		traverse(v, v.begin(), v.end());
+	}
+
+	std::cout << "\n\n\033[1;33m============= CLEAR TESTS =============\033[0m\n\n";
+	{
+		ft::vector<int> v;
+
+		std::cout << "\nv.clear() : \n";
+		v.clear();
+		traverse(v, v.begin(), v.end());
+
+		std::cout << "\nv.push_back(11), v.push_back(2) : \n";
+		v.push_back(11);
+		v.push_back(2);
+		traverse(v, v.begin(), v.end());
+
+		std::cout << "\nv.clear() : \n";
+		v.clear();
+		traverse(v, v.begin(), v.end());
+	}
 
 	return (0);
 }
