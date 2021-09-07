@@ -88,7 +88,7 @@ namespace ft
 				for (difference_type move = __end_ - position - 1; move>= 0; move--)
 				{
 					__alloc_.destroy(position + move);
-					__alloc_.construct(position + move + 1, *(position + move));
+					__alloc_.construct(position + move + n, *(position + move));
 				}
 				__end_ += n;
 				return (idx);

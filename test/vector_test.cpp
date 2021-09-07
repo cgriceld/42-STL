@@ -191,5 +191,47 @@ int main(void)
 			std::cout << "correct\n";
 		traverse(v, v.begin(), v.end());
 
+		std::cout << "\ninsert(v.begin(), -1) : \n";
+		it = v.insert(v.begin(), -1);
+		if (it == v.begin())
+			std::cout << "correct\n";
+		traverse(v, v.begin(), v.end());
+
+		std::cout << "\ninsert(v.begin() + 1, -2) : \n";
+		it = v.insert(v.begin() + 1, -2);
+		if (it == v.begin() + 1)
+			std::cout << "correct\n";
+		traverse(v, v.begin(), v.end());
+
+		std::cout << "\ninsert(v.begin() + 3, 3, 8) : \n";
+		v.insert(v.begin() + 3, 3, 8);
+		traverse(v, v.begin(), v.end());
+
+		std::cout << "\ninsert(v.begin(), 2, 9) : \n";
+		v.insert(v.begin(), 2, 9);
+		traverse(v, v.begin(), v.end());
+
+		std::cout << "\ninsert(v.end(), 2, 10) : \n";
+		v.insert(v.end(), 2, 10);
+		traverse(v, v.begin(), v.end());
+
+		std::cout << "\ninsert(v.end() - 1, 2, 11) : \n";
+		v.insert(v.end() - 1, 2, 11);
+		traverse(v, v.begin(), v.end());
+
+		std::cout << "\ninsert(v.end() - 1, 0, 11) : \n";
+		v.insert(v.end() - 1, 0, 11);
+		traverse(v, v.begin(), v.end());
+
+		std::cout << "\ninsert(v.begin() + 3, r.begin(), r.end()) : \n";
+		int arr3[] = {13, 21, 42, 7, -9};
+		ft::vector<int> r(arr3, arr3 + 5);
+		v.insert(v.begin() + 3, r.begin(), r.end());
+		traverse(v, v.begin(), v.end());
+
+		std::cout << "\ninsert(v.begin() + 3, r.begin(), r.begin()) : \n";
+		v.insert(v.begin() + 3, r.begin(), r.begin());
+		traverse(v, v.begin(), v.end());
+
 	return (0);
 }
