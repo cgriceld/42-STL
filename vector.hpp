@@ -37,8 +37,8 @@ namespace ft
 				begin_new = end_new = __alloc_.allocate(n);
 				if (!empty())
 				{
-					for(; __begin_ != __end_; __begin_++, end_new++)
-						__alloc_.construct(end_new, *__begin_);
+					for(pointer begin = __begin_; begin != __end_; begin++, end_new++)
+						__alloc_.construct(end_new, *begin);
 				}
 				this->~vector();
 				__begin_ = begin_new;
@@ -46,44 +46,17 @@ namespace ft
 				__end_cap_ = __begin_ + n;
 			}
 
-			template <typename T1, typename T2>
-			void range_init(T1 position, T2 first, T2 last)
+			template <typename T1>
+			void range_init(pointer position, T1 first, T1 last)
 			{
 				for (; first != last; position++, first++)
 					__alloc_.construct(position, *first);
 			}
 
-			template <typename M>
-			void val_init(M position, size_type n, const value_type &val)
+			void val_init(pointer position, size_type n, const value_type &val)
 			{
 				for (size_t i = 0; i < n; position++, i++)
 					__alloc_.construct(position, val);
-			}
-
-			void assign_shared(size_t count)
-			{
-				clear();
-				reserve(count);
-				__end_ += count;
-			}
-
-			template <typename M>
-			void insert_shared(M position, size_type n)
-			{
-				if (!n)
-					return;
-				if (__end_ + n > __end_cap_)
-				{
-					difference_type index = position - __begin_;
-					realloc(std::max(size() + n, capacity() * 2));
-					position = __begin_ + index;
-				}
-				for (difference_type move = __end_ - position - 1; move>= 0; move--)
-				{
-					__alloc_.destroy(position + move);
-					__alloc_.construct(position + move + 1, *(position + move));
-				}
-				__end_ += n;
 			}
 
 			template <typename M>
@@ -95,6 +68,31 @@ namespace ft
 				__end_cap_ = __end_ = __begin_ + count;
 			}
 
+			void assign_shared(size_t count)
+			{
+				clear();
+				reserve(count);
+				__end_ += count;
+			}
+
+			difference_type insert_shared(pointer position, size_type n)
+			{
+				if (!n)
+					return (-1);
+				difference_type idx = position - __begin_;
+				if ((__end_ + n > __end_cap_) || !__begin_)
+				{
+					realloc(std::max(size() + n, capacity() * 2));
+					position = __begin_ + idx;
+				}
+				for (difference_type move = __end_ - position - 1; move>= 0; move--)
+				{
+					__alloc_.destroy(position + move);
+					__alloc_.construct(position + move + 1, *(position + move));
+				}
+				__end_ += n;
+				return (idx);
+			}
 
 		public:
 
@@ -220,20 +218,19 @@ namespace ft
 			void insert (iterator position, InputIterator first, InputIterator last, \
 					typename enable_if<!ft::is_integral<InputIterator>::value>::type* = 0)
 			{
-				insert_shared(position, last - first);
-				range_init(position, first, last);
+				range_init(insert_shared(position.base(), last - first) + __begin_, first, last);
 			}
 
 			void insert (iterator position, size_type n, const value_type &val)
 			{
-				insert_shared(position, n);
-				val_init(position, n, val);
+				val_init(insert_shared(position.base(), n) + __begin_, n, val);
 			}
 
 			iterator insert (iterator position, const value_type &val)
 			{
+				difference_type idx = position.base() - __begin_;
 				insert(position, 1, val);
-				return (position);
+				return (iterator(__begin_ + idx));
 			}
 
 			template<class InputIt>

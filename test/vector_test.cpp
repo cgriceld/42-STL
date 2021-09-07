@@ -174,5 +174,22 @@ int main(void)
 		traverse(r, r.begin(), r.end());
 	}
 
+	std::cout << "\n\n\033[1;33m============= INSERT TESTS =============\033[0m\n\n";
+
+	std::cout << "\033[0;36mEMPTY VECTOR\n\033[0m";
+
+		ft::vector<int> v;
+		std::cout << "\ninsert(v.begin(), 1) : \n";
+		ft::vector<int>::iterator it = v.insert(v.begin(), 1);
+		if (it == v.begin())
+			std::cout << "correct\n";
+		traverse(v, v.begin(), v.end());
+
+		std::cout << "\ninsert(v.end(), 2) : \n";
+		it = v.insert(v.end(), 2);
+		if (it == v.begin() + 1)
+			std::cout << "correct\n";
+		traverse(v, v.begin(), v.end());
+
 	return (0);
 }
