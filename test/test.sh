@@ -27,32 +27,30 @@ function check()
 		rm log_$1.txt
 	fi
 	echo -e "⏰ $CYAN TIME TEST "
-	echo "std : " `(time ./std_vector_test) 2>&1 | grep real | cut -f 2`
-	echo -e "ft :  " `(time ./ft_vector_test) 2>&1 | grep real | cut -f 2` $WHITE
+	echo "std : " `(time ./std_$1_test) 2>&1 | grep real | cut -f 2`
+	echo -e "ft :  " `(time ./ft_$1_test) 2>&1 | grep real | cut -f 2` $WHITE
+}
+
+function routine()
+{
+	echo -e "$YELLOW_BOLD ============== $1 TEST ============== \n"
+
+	run ft $1
+	change_space ft std $1
+	run std $1
+	change_space std ft $1
+
+	./std_$1_test > std_$1.txt 2>&1
+	./ft_$1_test > ft_$1.txt 2>&1
+
+	check $1
 }
 
 echo -e "\n$YELLOW Runs all tests first with ft::, then change to std::, runs same tests again and compare outputs $WHITE"
 
-echo -e "$YELLOW_BOLD ============== VECTOR TEST ============== \n"
+declare -a cntr=("vector" "stack");
 
-run ft vector
-change_space ft std vector
-run std vector
-change_space std ft vector
-
-./std_vector_test > std_vector.txt 2>&1
-./ft_vector_test > ft_vector.txt 2>&1
-
-check vector
-
-echo -e "\n $YELLOW_BOLD ============== STACK TEST ============== \n"
-
-run ft stack
-change_space ft std stack
-run std stack
-change_space std ft stack
-
-./std_stack_test > std_stack.txt 2>&1
-./ft_stack_test > ft_stack.txt 2>&1
-
-check stack
+for i in "${cntr[@]}"
+do
+	routine "$i"
+done
