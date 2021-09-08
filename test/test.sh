@@ -16,7 +16,7 @@ function run()
 
 function change_space()
 {
-	sed -i '' "s/$1::$3/$2::$3/" $3_test.cpp test_utils.hpp
+	sed -i '' -e "s/$1::$3/$2::$3/g" -e "s/$1::swap/$2::swap/g" $3_test.cpp test_utils.hpp
 }
 
 function check()
