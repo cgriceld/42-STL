@@ -31,8 +31,9 @@ function check()
 	echo -e "ft :  " `(time ./ft_vector_test) 2>&1 | grep real | cut -f 2` $WHITE
 }
 
-echo -e "\n $YELLOW_BOLD ============== VECTOR TEST ============== \n"
-echo -e "$YELLOW Runs tests first with ft::, then change to std::, runs same tests again and compare outputs $WHITE"
+echo -e "\n$YELLOW Runs all tests first with ft::, then change to std::, runs same tests again and compare outputs $WHITE"
+
+echo -e "$YELLOW_BOLD ============== VECTOR TEST ============== \n"
 
 run ft vector
 change_space ft std vector
@@ -43,3 +44,15 @@ change_space std ft vector
 ./ft_vector_test > ft_vector.txt 2>&1
 
 check vector
+
+echo -e "\n $YELLOW_BOLD ============== STACK TEST ============== \n"
+
+run ft stack
+change_space ft std stack
+run std stack
+change_space std ft stack
+
+./std_stack_test > std_stack.txt 2>&1
+./ft_stack_test > ft_stack.txt 2>&1
+
+check stack
