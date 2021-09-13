@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 namespace ft
 {
 	template <class InputIt1, class InputIt2>
@@ -130,4 +132,77 @@ namespace ft
 
 	template<class T>
 	struct enable_if<true, T> { typedef T type; };
+
+	template <class _T1, class _T2>
+	struct pair
+	{
+		public:
+			typedef _T1 first_type;
+			typedef _T2 second_type;
+
+			_T1 first;
+			_T2 second;
+
+		pair() : first(_T1()), second(_T2()) {};
+
+		template <class U, class V>
+		pair (const pair <U, V> &pr) : first(pr.first), second(pr.second) {};
+
+		pair (const first_type &a, const second_type &b) : first(a), second(b) {};
+
+		~pair() {};
+
+		pair &operator = (const pair &pr)
+		{
+			if (this != &pr)
+			{
+				first = pr.first;
+				second = pr.second;
+			}
+			return (*this);
+		}
+	};
+
+	template <class T1, class T2>
+	bool operator == (const pair <T1, T2> &lhs, const pair <T1, T2> &rhs)
+	{
+		return (lhs.first == rhs.first && lhs.second == rhs.second);
+	}
+
+	template <class T1, class T2>
+	bool operator != (const pair <T1, T2> &lhs, const pair <T1, T2> &rhs)
+	{
+		return (!(lhs == rhs));
+	}
+
+	template <class T1, class T2>
+	bool operator < (const pair <T1, T2> &lhs, const pair <T1, T2> &rhs)
+	{
+		return (lhs.first < rhs.first || \
+			(!(rhs.first < lhs.first) && lhs.second < rhs.second));
+	}
+
+	template <class T1, class T2>
+	bool operator <= (const pair <T1, T2> &lhs, const pair <T1, T2> &rhs)
+	{
+		return (!(rhs < lhs));
+	}
+
+	template <class T1, class T2>
+	bool operator > (const pair <T1, T2> &lhs, const pair <T1, T2> &rhs)
+	{
+		return (rhs < lhs);
+	}
+
+	template <class T1, class T2>
+	bool operator >= (const pair <T1, T2> &lhs, const pair <T1, T2> &rhs)
+	{
+		return (!(lhs < rhs));
+	}
+
+	template <class T1, class T2>
+	pair<T1, T2> make_pair (T1 t, T2 u)
+	{
+		return (pair<T1, T2>(t, u));
+	}
 }

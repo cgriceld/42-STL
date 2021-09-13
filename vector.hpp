@@ -1,6 +1,5 @@
 #pragma once
 
-#include <memory>
 #include <algorithm>
 #include "iterator.hpp"
 #include "utils.hpp"
