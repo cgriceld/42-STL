@@ -1,14 +1,14 @@
-#include "stack.hpp"
+#include <map>
 #include <iostream>
 
 int main(void)
 {
 
-	ft::stack<int> s;
-	ft::stack<int> s1;
+	std::map<int, int> t;
 
-	if (s < s1)
-		std::cout << "less\n";
+	std::map<int, int>::iterator it;
+	it++;
+
 
 	return(0);
 }
