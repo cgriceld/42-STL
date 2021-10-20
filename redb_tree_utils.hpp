@@ -5,7 +5,7 @@
 
 #define color_red "\033[1;31m"
 #define color_black "\033[1;36m"
-#define reset "\033[0m\n"
+#define res_color "\033[0m\n"
 
 #include "iterator.hpp"
 
@@ -22,6 +22,7 @@ namespace ft
 			unsigned char color;
 
 			Node() : parent(NULL), right(NULL), left(NULL), data(), color(BLACK) {};
+			Node(const T &val) : parent(NULL), right(NULL), left(NULL), data(val), color(RED) {};
 			Node (const Node &other) : parent(other.parent), right(other.right), left(other.left), \
 										data(other.data), color(other.color) {};
 			~Node() {};

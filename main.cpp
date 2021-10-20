@@ -1,14 +1,11 @@
-#include <map>
-#include <iostream>
+#include "redb_tree.hpp"
 
 int main(void)
 {
-
-	std::map<int, int> t;
-
-	std::map<int, int>::iterator it;
-	it++;
-
+	ft::Rb_tree<int, std::less<int> > t;
+	t.insert(1);
+	t.insert(3);
+	t.insert(4);
 
 	return(0);
 }
