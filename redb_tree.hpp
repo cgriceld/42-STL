@@ -52,7 +52,7 @@ namespace ft
 			Node<T> *new_node(const T &value)
 			{
 				Node<T> *n = __alloc_.allocate(1);
-				__alloc_.construct(n, Node<T>(value));
+				__alloc_.construct(n, Node<T>(NULL, _tnull, _tnull, value));
 				return n;
 			}
 

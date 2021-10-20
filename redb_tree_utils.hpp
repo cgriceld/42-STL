@@ -22,7 +22,7 @@ namespace ft
 			unsigned char color;
 
 			Node() : parent(NULL), right(NULL), left(NULL), data(), color(BLACK) {};
-			Node(const T &val) : parent(NULL), right(NULL), left(NULL), data(val), color(RED) {};
+			Node(Node *p, Node *r, Node *l, const T &d) : parent(p), right(r), left(l), data(d), color(RED) {};
 			Node (const Node &other) : parent(other.parent), right(other.right), left(other.left), \
 										data(other.data), color(other.color) {};
 			~Node() {};

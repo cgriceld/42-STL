@@ -6,6 +6,7 @@ int main(void)
 	t.insert(1);
 	t.insert(3);
 	t.insert(4);
+	t.insert(5);
 
 	return(0);
 }
