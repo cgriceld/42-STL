@@ -67,6 +67,8 @@ namespace ft
 				return (node);
 			}
 
+			void base_insert()
+
 		public:
 
 			// ========================== CONSTRUCTORS & DESTRUCTOR ========================== //
@@ -81,52 +83,28 @@ namespace ft
 
 			// ========================== ITERATORS ========================== //
 
-			iterator begin(void) { return (iterator(__begin_)); };
-			const_iterator begin(void) const { return (const_iterator(__begin_)); };
+			iterator begin(void) { return (iterator(minimum(_root), _tnull)); };
+			const_iterator begin(void) const { return (const_iterator(minimum(_root), _tnull)); };
 
 			reverse_iterator rbegin(void) { return (reverse_iterator(end())); };
 			const_reverse_iterator rbegin(void) const { return (const_reverse_iterator(end())); };
 
-			iterator end(void) { return (iterator(__end_)); };
-			const_iterator end(void) const { return (const_iterator(__end_)); };
+			iterator end(void) { return (iterator(maximum(_root), _tnull)); };
+			const_iterator end(void) const { return (const_iterator(maximum(_root), _tnull)); };
 
-			reverse_iterator rend(void) { return (reverse_iterator(begin()--)); };
-			const_reverse_iterator rend(void) const { return (const_reverse_iterator(begin()--)); };
+			reverse_iterator rend(void) { return (reverse_iterator(begin())); };
+			const_reverse_iterator rend(void) const { return (const_reverse_iterator(begin())); };
 
 			// ========================== MEMBER FUNCTIONS ========================== //
 
-			// ---------------- ACCESS / INFO ---------------- //
-
-			reference at (size_type n)
+			std::pair<iterator, bool> insert (const value_type &value)
 			{
-				if (n < 0 || n >= size())
-					throw std::out_of_range("vector");
-				return (__begin_[n]);
+
 			}
 
-			const_reference at (size_type n) const
-			{
-				if (n < 0 || n >= size())
-					throw std::out_of_range("vector");
-				return (__begin_[n]);
-			}
+			iterator insert (iterator position, const value_type& val);
 
-			reference front(void) { return (*__begin_); };
-
-			const_reference front(void) const { return (*__begin_); };
-
-			reference back(void) { return (*(__end_ - 1)); };
-
-			const_reference back(void) const { return (*(__end_ - 1)); };
-
-			size_type capacity(void) const { return (static_cast<size_type>(__end_cap_ - __begin_)); };
-
-			bool empty(void) const { return (__begin_ == __end_); };
-
-			size_type size(void) const { return (static_cast<size_type>(__end_ - __begin_)); };
-
-			size_type max_size(void) const { return (__alloc_.max_size()); };
-
-			allocator_type get_allocator(void) const { return (__alloc_); };
+			template <class InputIterator>
+			void insert (InputIterator first, InputIterator last);
 	};
 }
