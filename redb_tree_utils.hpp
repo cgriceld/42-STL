@@ -21,7 +21,8 @@ namespace ft
 			T data;
 			unsigned char color;
 
-			Node() : parent(NULL), right(NULL), left(NULL), data(), color(BLACK) {};
+			Node() {};
+			Node(Node *t) : parent(t), right(t), left(t), data(), color(BLACK) {};
 			Node(Node *p, Node *r, Node *l, const T &d) : parent(p), right(r), left(l), data(d), color(RED) {};
 			Node (const Node &other) : parent(other.parent), right(other.right), left(other.left), \
 										data(other.data), color(other.color) {};
@@ -40,6 +41,23 @@ namespace ft
 			}
 	};
 
+	template <typename T>
+	struct Rb_header
+	{
+		Node<T> *root;
+		Node<T> *tnull;
+		Node<T> *leftmost;
+		Node<T> *rightmost;
+
+		// Rb_header()
+		// {
+		// 	tnull = new Node<T>();
+		// 	root = tnull;
+		// 	leftmost = tnull;
+		// 	rightmost = tnull;
+		// }
+	};
+
 	template <class T>
 	class Rb_tree_iterator : public iterator <bidirectional_iterator_tag, T>
 	{
@@ -50,14 +68,17 @@ namespace ft
 
 		// ---------------- CONSTRUCTORS & DESTRUCTOR ---------------- //
 
-			Rb_tree_iterator() : _ptr(NULL), _tnull(NULL) {}
-			explicit Rb_tree_iterator(Node *ptr, Node *tnull) : _ptr(ptr), _tnull(tnull) {}
-			Rb_tree_iterator(const Rb_tree_iterator &copy): _ptr(copy._ptr), _tnull(copy._tnull) {}
+			Rb_tree_iterator() : _ptr(NULL), _header(NULL) {}
+			explicit Rb_tree_iterator(Node *ptr, Rb_header<T> *header) : _ptr(ptr), _header(header) {}
+			Rb_tree_iterator(const Rb_tree_iterator &copy): _ptr(copy._ptr), _header(copy._header) {}
 
 			Rb_tree_iterator &operator = (const Rb_tree_iterator &copy)
 			{
 				if (this != &copy)
+				{
 					_ptr = copy._ptr;
+					_header = copy._header;
+				}
 				return (*this);
 			}
 
@@ -80,25 +101,20 @@ namespace ft
 			// ++ptr
 			Rb_tree_iterator &operator ++ (void)
 			{
-				if (_ptr && _ptr != _tnull)
+				if (_ptr->right != _header->tnull)
 				{
-					if (_ptr->right != _tnull)
-					{
-						_ptr = _ptr->right;
-						while (_ptr != _tnull && _ptr->left != _tnull)
-							_ptr = _ptr->left;
-					}
-					else
-					{
-						Node *_y = _ptr;
-						_ptr = _ptr->parent;
-						while (_ptr != _tnull && _ptr->right == _y)
-						{
-							_y = _ptr;
-							_ptr = _ptr->parent;
-						}
-					}
+					_ptr = _ptr->right;
+					while (_ptr->left != _header->tnull)
+						_ptr = _ptr->left;
+					return (*this);
 				}
+				Node *_y = _ptr->parent;
+				while (_y != _header->tnull && _ptr == _y->right)
+				{
+					_ptr = _y;
+					_y = _y->parent;
+				}
+				_ptr = _y;
 				return (*this);
 			}
 
@@ -112,30 +128,57 @@ namespace ft
 
 		// ---------------- MINUS ---------------- //
 
+			// // --ptr
+			// Rb_tree_iterator &operator -- (void)
+			// {
+			// 	if (_ptr == _header->tnull)
+			// 	{
+			// 		_ptr = _header->rightmost;
+			// 		return (*this);
+			// 	}
+			// 	if (_ptr->left != _header->tnull)
+			// 	{
+			// 		_ptr = _ptr->left;
+			// 			while (_ptr != _header->tnull && _ptr->right != _header->tnull)
+			// 				_ptr = _ptr->right;
+			// 		return (*this);
+			// 	}
+			// 	Node *_y = _ptr;
+			// 	_ptr = _ptr->parent;
+			// 	while (_ptr != _header->tnull && _ptr->left == _y)
+			// 	{
+			// 		_y = _ptr;
+			// 		_ptr = _ptr->parent;
+			// 	}
+			// 	return (*this);
+			// }
+
+			// --ptr
 			Rb_tree_iterator &operator -- (void)
 			{
-				if (_ptr && _ptr != _tnull)
+				if (_ptr == _header->tnull)
 				{
-					if (_ptr->left != _tnull)
-					{
-						_ptr = _ptr->left;
-						while (_ptr != _tnull && _ptr->right != _tnull)
-							_ptr = _ptr->right;
-					}
-					else
-					{
-						Node *_y = _ptr;
-						_ptr = _ptr->parent;
-						while (_ptr != _tnull && _ptr->left == _y)
-						{
-							_y = _ptr;
-							_ptr = _ptr->parent;
-						}
-					}
+					_ptr = _header->rightmost;
+					return (*this);
 				}
+				if (_ptr->left != _header->tnull)
+				{
+					_ptr = _ptr->left;
+						while (_ptr != _header->tnull && _ptr->right != _header->tnull)
+							_ptr = _ptr->right;
+					return (*this);
+				}
+				Node *_y = _ptr->parent;
+				while (_y != _header->tnull && _ptr == _y->left)
+				{
+					_ptr = _y;
+					_y = _y->parent;
+				}
+				_ptr = _y;
 				return (*this);
 			}
 
+			// ptr--
 			Rb_tree_iterator operator -- (int)
 			{
 				Rb_tree_iterator tmp = *this;
@@ -155,7 +198,7 @@ namespace ft
 			}
 
 		private:
-			Node *_tnull;
+			Rb_header<T> *_header;
 			Node *_ptr;
 		};
 }

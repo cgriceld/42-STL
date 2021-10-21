@@ -288,7 +288,11 @@ namespace ft
 
 			iterator_type base(void) const { return (_current); };
 
-			reference operator * (void) const { return (*(_current - 1)); };
+			reference operator * (void) const
+			{
+				_Iterator tmp = _current;
+				return (*(--tmp));
+			};
 
 			pointer operator->() const { return (&(operator*())); };
 
