@@ -13,15 +13,15 @@ int main(void)
 	std::cout << "----------\n";
 	std::cout << "INSERT 4\n";
 	t.insert(4);
-	std::cout << "----------\n";
-	std::cout << "INSERT 5\n";
-	t.insert(5);
-	std::cout << "----------\n";
-	std::cout << "INSERT -3\n";
-	t.insert(-3);
-	std::cout << "----------\n";
-	std::cout << "INSERT 10\n";
-	t.insert(10);
+	// std::cout << "----------\n";
+	// std::cout << "INSERT 5\n";
+	// t.insert(5);
+	// std::cout << "----------\n";
+	// std::cout << "INSERT -3\n";
+	// t.insert(-3);
+	// std::cout << "----------\n";
+	// std::cout << "INSERT 10\n";
+	// t.insert(10);
 	
 	std::cout << "============\n";
 
@@ -35,25 +35,25 @@ int main(void)
 	std::cout << *it << std::endl;
 	std::cout << "----------\n";
 
-	ft::Rb_tree<int, std::less<int> >::iterator ite = t.end();
-	//std::cout << *ite << std::endl;
-	ite--;
-	std::cout << *ite << std::endl;
-	ite--;
-	std::cout << *ite << std::endl;
-	ite--;
-	std::cout << *ite << std::endl;
-	ite--;
-	std::cout << *ite << std::endl;
-	ite--;
-	std::cout << *ite << std::endl;
-	ite--;
-	std::cout << *ite << std::endl;
-	ite--;
-	std::cout << *ite << std::endl;
-	ite--;
-	std::cout << *ite << std::endl;
-	std::cout << "----------\n";
+	// ft::Rb_tree<int, std::less<int> >::iterator ite = t.end();
+	// //std::cout << *ite << std::endl;
+	// ite--;
+	// std::cout << *ite << std::endl;
+	// ite--;
+	// std::cout << *ite << std::endl;
+	// ite--;
+	// std::cout << *ite << std::endl;
+	// ite--;
+	// std::cout << *ite << std::endl;
+	// ite--;
+	// std::cout << *ite << std::endl;
+	// ite--;
+	// std::cout << *ite << std::endl;
+	// ite--;
+	// std::cout << *ite << std::endl;
+	// ite--;
+	// std::cout << *ite << std::endl;
+	// std::cout << "----------\n";
 
 	// ft::Rb_tree<int, std::less<int> >::reverse_iterator itr = t.rbegin();
 	// std::cout << *itr << std::endl;
@@ -73,6 +73,12 @@ int main(void)
 	// std::cout << "----------\n";
 
 	// std::map<char, int>::iterator ite = t.end();
+	// std::cout << ite->first << std::endl;
+	// ite--;
+	// std::cout << ite->first << std::endl;
+	// ite--;
+	// ite--;
+	// ite--;
 	// std::cout << ite->first << std::endl;
 	// ite--;
 	// std::cout << ite->first << std::endl;

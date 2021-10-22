@@ -220,12 +220,20 @@ namespace ft
 				{
 					node->color = BLACK;
 					print_tree(header.root, "", true);
+					if (header.leftmost == header.tnull || node->data < header.leftmost->data)
+						header.leftmost = node;
+					if (header.rightmost == header.tnull || node->data > header.rightmost->data)
+						header.rightmost = node;
 					return;
 				}
 
 				if (node->parent->parent == header.tnull)
 				{
 					print_tree(header.root, "", true);
+					if (header.leftmost == header.tnull || node->data < header.leftmost->data)
+						header.leftmost = node;
+					if (header.rightmost == header.tnull || node->data > header.rightmost->data)
+						header.rightmost = node;
 					return;
 				}
 				
