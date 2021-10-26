@@ -48,14 +48,6 @@ namespace ft
 		Node<T> *tnull;
 		Node<T> *leftmost;
 		Node<T> *rightmost;
-
-		// Rb_header()
-		// {
-		// 	tnull = new Node<T>();
-		// 	root = tnull;
-		// 	leftmost = tnull;
-		// 	rightmost = tnull;
-		// }
 	};
 
 	template <class T>
@@ -106,6 +98,11 @@ namespace ft
 					_ptr = _ptr->right;
 					while (_ptr->left != _header->tnull)
 						_ptr = _ptr->left;
+					return (*this);
+				}
+				if (_ptr == _header->rightmost)
+				{
+					_ptr = NULL;
 					return (*this);
 				}
 				Node *_y = _ptr->parent;
