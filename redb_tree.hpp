@@ -65,7 +65,7 @@ namespace ft
 			Node<T> *new_node(const T &value)
 			{
 				Node<T> *n = __alloc_.allocate(1);
-				__alloc_.construct(n, Node<T>(header.tnull, header.tnull, header.tnull, value));
+				__alloc_.construct(n, Node<T>(header.tnull, value));
 				return (n);
 			}
 			
@@ -169,7 +169,7 @@ namespace ft
 					__alloc_(alloc), __cmp_(cmp)
 			{
 				header.tnull = __alloc_.allocate(1);
-				__alloc_.construct(header.tnull, Node<T>(header.tnull));
+				__alloc_.construct(header.tnull, Node<T>(NULL));
 				header.root = header.tnull;
 				header.leftmost = header.tnull;
 				header.rightmost = header.tnull;
@@ -180,14 +180,14 @@ namespace ft
 			iterator begin(void) { return (iterator(header.leftmost, &header)); };
 			const_iterator begin(void) const { return (const_iterator(header.leftmost, &header)); };
 
-			// reverse_iterator rbegin(void) { return (reverse_iterator(end())); };
-			// const_reverse_iterator rbegin(void) const { return (const_reverse_iterator(end())); };
+			reverse_iterator rbegin(void) { return (reverse_iterator(end())); };
+			const_reverse_iterator rbegin(void) const { return (const_reverse_iterator(end())); };
 
 			iterator end(void) { return (iterator(header.tnull, &header)); };
 			const_iterator end(void) const { return (const_iterator(header.tnull, &header)); };
 
-			// reverse_iterator rend(void) { return (reverse_iterator(begin())); };
-			// const_reverse_iterator rend(void) const { return (const_reverse_iterator(begin())); };
+			reverse_iterator rend(void) { return (reverse_iterator(begin())); };
+			const_reverse_iterator rend(void) const { return (const_reverse_iterator(begin())); };
 
 			// ========================== MEMBER FUNCTIONS ========================== //
 

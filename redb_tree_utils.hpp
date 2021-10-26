@@ -21,9 +21,8 @@ namespace ft
 			T data;
 			unsigned char color;
 
-			Node() {};
-			Node(Node *t) : parent(t), right(t), left(t), data(), color(BLACK) {};
-			Node(Node *p, Node *r, Node *l, const T &d) : parent(p), right(r), left(l), data(d), color(RED) {};
+			Node(Node *n) : parent(n), right(n), left(n), color(BLACK) {};
+			Node(Node *n, const T &d) : parent(n), right(n), left(n), data(d), color(RED) {};
 			Node (const Node &other) : parent(other.parent), right(other.right), left(other.left), \
 										data(other.data), color(other.color) {};
 			~Node() {};
@@ -38,6 +37,20 @@ namespace ft
 					color = other.color;
 				}
 				return (*this);
+			}
+
+			static Node *minimum(Node *node, Node *tnull)
+			{
+				while (node->left != tnull)
+					node = node->left;
+				return (node);
+			}
+
+			static Node *maximum(Node *node, Node *tnull)
+			{
+				while (node->right != tnull)
+					node = node->right;
+				return (node);
 			}
 	};
 
@@ -93,25 +106,16 @@ namespace ft
 			// ++ptr
 			Rb_tree_iterator &operator ++ (void)
 			{
-				if (_ptr->right != _header->tnull)
-				{
+				if (_ptr == _header->rightmost || _ptr == _header->tnull)
 					_ptr = _ptr->right;
-					while (_ptr->left != _header->tnull)
-						_ptr = _ptr->left;
-					return (*this);
-				}
-				if (_ptr == _header->rightmost)
+				else if (_ptr->right != _header->tnull)
+					_ptr = Node::minimum(_ptr->right, _header->tnull);
+				else
 				{
-					_ptr = NULL;
-					return (*this);
+					while (_ptr->parent != _header->tnull && _ptr == _ptr->parent->right)
+						_ptr = _ptr->parent;
+					_ptr = _ptr->parent;
 				}
-				Node *_y = _ptr->parent;
-				while (_y != _header->tnull && _ptr == _y->right)
-				{
-					_ptr = _y;
-					_y = _y->parent;
-				}
-				_ptr = _y;
 				return (*this);
 			}
 
@@ -125,53 +129,21 @@ namespace ft
 
 		// ---------------- MINUS ---------------- //
 
-			// // --ptr
-			// Rb_tree_iterator &operator -- (void)
-			// {
-			// 	if (_ptr == _header->tnull)
-			// 	{
-			// 		_ptr = _header->rightmost;
-			// 		return (*this);
-			// 	}
-			// 	if (_ptr->left != _header->tnull)
-			// 	{
-			// 		_ptr = _ptr->left;
-			// 			while (_ptr != _header->tnull && _ptr->right != _header->tnull)
-			// 				_ptr = _ptr->right;
-			// 		return (*this);
-			// 	}
-			// 	Node *_y = _ptr;
-			// 	_ptr = _ptr->parent;
-			// 	while (_ptr != _header->tnull && _ptr->left == _y)
-			// 	{
-			// 		_y = _ptr;
-			// 		_ptr = _ptr->parent;
-			// 	}
-			// 	return (*this);
-			// }
-
 			// --ptr
 			Rb_tree_iterator &operator -- (void)
 			{
-				if (_ptr == _header->tnull)
-				{
+				if (_ptr == _header->leftmost)
+					_ptr = NULL;
+				else if (_ptr == _header->tnull)
 					_ptr = _header->rightmost;
-					return (*this);
-				}
-				if (_ptr->left != _header->tnull)
+				else if (_ptr->left != _header->tnull)
+					_ptr = Node::maximum(_ptr->left, _header->tnull);
+				else
 				{
-					_ptr = _ptr->left;
-						while (_ptr != _header->tnull && _ptr->right != _header->tnull)
-							_ptr = _ptr->right;
-					return (*this);
+					while (_ptr->parent != _header->tnull && _ptr == _ptr->parent->left)
+						_ptr = _ptr->parent;
+					_ptr = _ptr->parent;
 				}
-				Node *_y = _ptr->parent;
-				while (_y != _header->tnull && _ptr == _y->left)
-				{
-					_ptr = _y;
-					_y = _y->parent;
-				}
-				_ptr = _y;
 				return (*this);
 			}
 
