@@ -43,24 +43,10 @@ namespace ft
 					std::cout << "L----";
 					indent += "|    ";
 				}
-				std::cout << (node->color ? color_red : color_black) << node->data << res_color;
+				std::cout << (node->color ? color_red : color_black) << (node->data).first << res_color;
 				print_tree(node->left, indent, false);
 				print_tree(node->right, indent, true);
 			}
-
-			// Node<T> minimum(Node<T> *node, Node<T> *tnull)
-			// {
-			// while (node->left != tnull)
-			// 		node = node->left;
-			// 	return (node);
-			// }
-
-			// Node<T> *maximum(Node<T> *node, Node<T> *tnull)
-			// {
-			// 	while (node->right != tnull)
-			// 		node = node->right;
-			// 	return (node);
-			// }
 
 			Node<T> *new_node(const T &value)
 			{
@@ -105,21 +91,25 @@ namespace ft
 				x->parent = y;
 			}
 
-			void fix_insert(Node<T> *k)
+			void insert_recolor(Node<T> *k, Node<T> *u)
+			{
+				u->color = BLACK;
+				k->parent->color = BLACK;
+				k->parent->parent->color = RED;
+				k = k->parent->parent;
+			}
+
+			void insert_rebalance(Node<T> *k)
 			{
 				Node<T> *u;
-				while (k->parent->color == RED)
+
+				while (k != header.root && k->parent->color == RED)
 				{
 					if (k->parent == k->parent->parent->right)
 					{
 						u = k->parent->parent->left;
 						if (u->color == RED)
-						{
-							u->color = BLACK;
-							k->parent->color = BLACK;
-							k->parent->parent->color = RED;
-							k = k->parent->parent;
-						}
+							insert_recolor(k, u);
 						else
 						{
 							if (k == k->parent->left)
@@ -135,14 +125,8 @@ namespace ft
 					else
 					{
 						u = k->parent->parent->right;
-
 						if (u->color == RED)
-						{
-							u->color = BLACK;
-							k->parent->color = BLACK;
-							k->parent->parent->color = RED;
-							k = k->parent->parent;	
-						}
+							insert_recolor(k, u);
 						else
 						{
 							if (k == k->parent->right)
@@ -155,24 +139,49 @@ namespace ft
 							rotate_right(k->parent->parent);
 						}
 					}
-					if (k == header.root)
-						break;
 				}
 				header.root->color = BLACK;
 			}
 
-		public:
+			void update_borders(Node<T> *node)
+			{
+				if (header.leftmost == header.tnull || __cmp_(node->data, header.leftmost->data))
+					header.leftmost = node;
+				if (header.rightmost == header.tnull || __cmp_(header.rightmost->data, node->data))
+					header.rightmost = node;
+			}
 
-			// ========================== CONSTRUCTORS & DESTRUCTOR ========================== //
-
-			explicit Rb_tree(const allocator_type &alloc = allocator_type(), const Compare &cmp = Compare()) : \
-					__alloc_(alloc), __cmp_(cmp)
+			void init(void)
 			{
 				header.tnull = __alloc_.allocate(1);
 				__alloc_.construct(header.tnull, Node<T>(NULL));
 				header.root = header.tnull;
 				header.leftmost = header.tnull;
 				header.rightmost = header.tnull;
+			}
+
+		public:
+
+			// ========================== CONSTRUCTORS & DESTRUCTOR ========================== //
+
+			explicit Rb_tree(const Compare &cmp = Compare(), const allocator_type &alloc = allocator_type()) : \
+					__alloc_(alloc), __cmp_(cmp)
+			{
+				init();
+			}
+
+			template <class InputIterator>
+			Rb_tree(InputIterator first, InputIterator last, const Compare &cmp = Compare(), \
+					const allocator_type &alloc = allocator_type()): __alloc_(alloc), __cmp_(cmp)
+			{
+				init();
+				insert(first, last);
+			}
+
+			Rb_tree(const Rb_tree &other): __alloc_(other.__alloc_), __cmp_(other.__cmp_)
+			{
+				init();
+				insert(other.begin(), other.end());
 			}
 
 			// ========================== ITERATORS ========================== //
@@ -191,63 +200,49 @@ namespace ft
 
 			// ========================== MEMBER FUNCTIONS ========================== //
 
-			//std::pair<iterator, bool>
-			void insert (const T &value)
+			ft::pair<iterator, bool> insert (const T &value)
 			{
-				Node<T> *node = new_node(value);
 				Node<T> *y = header.tnull;
 				Node<T> *x = header.root;
 
 				while (x != header.tnull)
 				{
+					if (x->data == value)
+						return (ft::make_pair(iterator(x, &header), false));
 					y = x;
-					x = node->data < x->data ? x->left : x->right;
+					x = __cmp_(value, x->data) ? x->left : x->right;
 				}
-
+				Node<T> *node = new_node(value);
 				node->parent = y;
 				if (y == header.tnull)
 					header.root = node;
-				else if (node->data < y->data)
-				{
+				else if (__cmp_(node->data, y->data))
 					y->left = node;
-				}
+				else
+					y->right = node;
+				if (node->parent == header.tnull)
+					node->color = BLACK;
 				else
 				{
-					y->right = node;
+					if (node->parent->parent != header.tnull)
+						insert_rebalance(node);
 				}
-
-				if (node->parent == header.tnull)
-				{
-					node->color = BLACK;
-					print_tree(header.root, "", true);
-					if (header.leftmost == header.tnull || node->data < header.leftmost->data)
-						header.leftmost = node;
-					if (header.rightmost == header.tnull || node->data > header.rightmost->data)
-						header.rightmost = node;
-					return;
-				}
-
-				if (node->parent->parent == header.tnull)
-				{
-					print_tree(header.root, "", true);
-					if (header.leftmost == header.tnull || node->data < header.leftmost->data)
-						header.leftmost = node;
-					if (header.rightmost == header.tnull || node->data > header.rightmost->data)
-						header.rightmost = node;
-					return;
-				}
-				
-				fix_insert(node);
-				if (header.leftmost == header.tnull || node->data < header.leftmost->data)
-					header.leftmost = node;
-				if (header.rightmost == header.tnull || node->data > header.rightmost->data)
-					header.rightmost = node;
+				update_borders(node);
 				print_tree(header.root, "", true);
+				return (ft::make_pair(iterator(node, &header), true));
 			}
 
-			iterator insert (iterator position, const T &val);
+			iterator insert (iterator position, const T &val)
+			{
+				ft::pair<iterator, bool> res = insert(val);
+				return (res.first);
+			}
 
 			template <class InputIterator>
-			void insert (InputIterator first, InputIterator last);
+			void insert (InputIterator first, InputIterator last)
+			{
+				while (first != last)
+					insert(*first++);
+			}
 	};
 }

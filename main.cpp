@@ -1,29 +1,39 @@
-#include "redb_tree.hpp"
+#include "map.hpp"
 #include <iostream>
 #include <map>
 
 int main(void)
 {
-	// ft::Rb_tree<int, std::less<int> > t;
-	// std::cout << "INSERT 1\n";
-	// t.insert(1);
-	// std::cout << "----------\n";
-	// std::cout << "INSERT 3\n";
-	// t.insert(3);
-	// std::cout << "----------\n";
-	// std::cout << "INSERT 4\n";
-	// t.insert(4);
-	// std::cout << "----------\n";
-	// std::cout << "INSERT 5\n";
-	// t.insert(5);
-	// std::cout << "----------\n";
-	// std::cout << "INSERT -3\n";
-	// t.insert(-3);
+	ft::map<int, char> t;
+	std::cout << "INSERT 1\n";
+	t.insert(ft::make_pair(1, 'a'));
+	std::cout << "----------\n";
+	std::cout << "INSERT 3\n";
+	t.insert(ft::make_pair(3, 'a'));
+	std::cout << "----------\n";
+	std::cout << "INSERT 4\n";
+	t.insert(ft::make_pair(4, 'a'));
+	std::cout << "----------\n";
+	std::cout << "INSERT 5\n";
+	t.insert(ft::make_pair(5, 'a'));
+	std::cout << "----------\n";
+	std::cout << "INSERT -3\n";
+	t.insert(ft::make_pair(-3, 'a'));
+	std::cout << "----------\n";
+	std::cout << "INSERT 10\n";
+	t.insert(ft::make_pair(10, 'a'));
+	std::cout << "----------\n";
+	std::cout << "INSERT 2\n";
+	ft::pair<ft::map<int, char>::iterator, bool> p = t.insert(ft::make_pair(2, 'a'));
+	std::cout << p.first->first << "," << p.second << std::endl;
+
+	ft::pair<ft::map<int, char>::iterator, bool> pi = t.insert(ft::make_pair(2, 'a'));
+	std::cout << pi.first->first << "," << pi.second << std::endl;
 	// std::cout << "----------\n";
 	// std::cout << "INSERT 10\n";
-	// t.insert(10);
+	// t.insert(ft::make_pair(1, 'a'));
 	
-	// std::cout << "============\n";
+	std::cout << "============\n";
 
 	// ft::Rb_tree<int, std::less<int> >::iterator it = t.begin();
 	// std::cout << *it << std::endl;
