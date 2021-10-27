@@ -161,7 +161,131 @@ namespace ft
 			{
 				return (_ptr == rhs._ptr);
 			}
-			bool operator != (const Rb_tree_iterator &rhs) const 
+			bool operator != (const Rb_tree_iterator &rhs) const
+			{
+				return (_ptr != rhs._ptr);
+			}
+
+			// ---------------- GETTERS ---------------- //
+
+			Rb_header<T> *header() const { return (_header); }
+			Node *ptr() const { return (_ptr); }
+
+		private:
+			Rb_header<T> *_header;
+			Node *_ptr;
+	};
+
+	template <class T>
+	class Rb_tree_const_iterator : public iterator <bidirectional_iterator_tag, T>
+	{
+		public:
+			typedef ft::Node<T> Node;
+			typedef const T* pointer;
+			typedef const T& reference;
+
+		// ---------------- CONSTRUCTORS & DESTRUCTOR ---------------- //
+
+			Rb_tree_const_iterator() : _ptr(NULL), _header(NULL) {}
+			explicit Rb_tree_const_iterator(Node *ptr, Rb_header<T> *header) : _ptr(ptr), _header(header) {}
+			Rb_tree_const_iterator(const Rb_tree_const_iterator &copy): _ptr(copy._ptr), _header(copy._header) {}
+			Rb_tree_const_iterator(const Rb_tree_iterator<T> &copy): _ptr(copy.ptr()), _header(copy.header()) {}
+
+			Rb_tree_const_iterator &operator = (const Rb_tree_const_iterator &copy)
+			{
+				if (this != &copy)
+				{
+					_ptr = copy._ptr;
+					_header = copy._header;
+				}
+				return (*this);
+			}
+
+			Rb_tree_const_iterator &operator = (const Rb_tree_iterator<T> &copy)
+			{
+				if (this != &copy)
+				{
+					_ptr = copy.ptr();
+					_header = copy.header();
+				}
+				return (*this);
+			}
+
+			~Rb_tree_const_iterator() {}
+
+		// ---------------- ACCESS ---------------- //
+
+			reference operator * (void) const
+			{
+				return (_ptr->data);
+			}
+
+			pointer operator -> (void) const
+			{
+				return (&_ptr->data);
+			}
+
+		// ---------------- PLUS ---------------- //
+
+			// ++ptr
+			Rb_tree_const_iterator &operator ++ (void)
+			{
+				if (_ptr == _header->rightmost || _ptr == _header->tnull)
+					_ptr = _ptr->right;
+				else if (_ptr->right != _header->tnull)
+					_ptr = Node::minimum(_ptr->right, _header->tnull);
+				else
+				{
+					while (_ptr->parent != _header->tnull && _ptr == _ptr->parent->right)
+						_ptr = _ptr->parent;
+					_ptr = _ptr->parent;
+				}
+				return (*this);
+			}
+
+			// ptr++
+			Rb_tree_const_iterator operator ++ (int)
+			{
+				Rb_tree_const_iterator tmp = *this;
+				++(*this);
+				return (tmp);
+			}
+
+		// ---------------- MINUS ---------------- //
+
+			// --ptr
+			Rb_tree_const_iterator &operator -- (void)
+			{
+				if (_ptr == _header->leftmost)
+					_ptr = NULL;
+				else if (_ptr == _header->tnull)
+					_ptr = _header->rightmost;
+				else if (_ptr->left != _header->tnull)
+					_ptr = Node::maximum(_ptr->left, _header->tnull);
+				else
+				{
+					while (_ptr->parent != _header->tnull && _ptr == _ptr->parent->left)
+						_ptr = _ptr->parent;
+					_ptr = _ptr->parent;
+				}
+				return (*this);
+			}
+
+			// ptr--
+			Rb_tree_const_iterator operator -- (int)
+			{
+				Rb_tree_const_iterator tmp = *this;
+				--(*this);
+				return (tmp);
+			}
+
+			// ---------------- COMPARE ---------------- //
+
+			bool operator == (const Rb_tree_const_iterator &rhs) const
+			{
+				return (_ptr == rhs._ptr);
+			}
+			bool operator != (const Rb_tree_const_iterator &rhs) const 
 			{
 				return (_ptr != rhs._ptr);
 			}
@@ -169,5 +293,5 @@ namespace ft
 		private:
 			Rb_header<T> *_header;
 			Node *_ptr;
-		};
+	};
 }

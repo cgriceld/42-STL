@@ -46,7 +46,7 @@ namespace ft
 				typedef typename allocator_type::reference reference;
 				typedef typename allocator_type::const_reference const_reference;
 				typedef Rb_tree_iterator<value_type> iterator;
-				typedef Rb_tree_iterator<const value_type> const_iterator;
+				typedef Rb_tree_const_iterator<value_type> const_iterator;
 				typedef ft::reverse_iterator<iterator> reverse_iterator;
 				typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
 				typedef std::size_t size_type;
@@ -54,28 +54,40 @@ namespace ft
 
 				// ========================== CONSTRUCTORS & DESTRUCTOR ========================== //
 
-				explicit map(const key_compare &comp = key_compare(), const allocator_type &alloc = allocator_type()) : \
+				explicit map (const key_compare &comp = key_compare(), const allocator_type &alloc = allocator_type()) : \
 								__cmp_(comp), __alloc_(alloc), __tree(value_compare(comp)) {};
 
 				template<class InputIt>
-				map(InputIt first, InputIt last, const key_compare &comp = key_compare(), const allocator_type &alloc = allocator_type()) : \
+				map (InputIt first, InputIt last, const key_compare &comp = key_compare(), const allocator_type &alloc = allocator_type()) : \
 								__cmp_(comp), __alloc_(alloc), __tree(first, last, value_compare(comp)) {};
 
-				map(const map &other) : __cmp_(other.__cmp_), __alloc_(other.__alloc_), __tree(other.__tree) {};
+				map (const map &other) : __cmp_(other.__cmp_), __alloc_(other.__alloc_), __tree(other.__tree) {};
+
+				map &operator = (const map &copy)
+				{
+					if (this == &copy)
+						return (*this);
+					__alloc_ = copy.__alloc_;
+					__cmp_ = copy.__cmp_;
+					__tree = copy.__tree;
+					return (*this);
+				}
+
+				~map () {};
 
 				// ========================== ITERATORS ========================== //
 
-				iterator begin(void) { return (__tree.begin()); };
-				const_iterator begin(void) const { return (__tree.begin()); };
+				iterator begin (void) { return (__tree.begin()); };
+				const_iterator begin (void) const { return (__tree.begin()); };
 
-				reverse_iterator rbegin(void) { return (__tree.rbegin()); };
-				const_reverse_iterator rbegin(void) const { return (__tree.rbegin()); };
+				reverse_iterator rbegin (void) { return (__tree.rbegin()); };
+				const_reverse_iterator rbegin (void) const { return (__tree.rbegin()); };
 
-				iterator end(void) { return (__tree.end()); };
-				const_iterator end(void) const { return (__tree.end()); };
+				iterator end (void) { return (__tree.end()); };
+				const_iterator end (void) const { return (__tree.end()); };
 
-				reverse_iterator rend(void) { return (__tree.rend()); };
-				const_reverse_iterator rend(void) const { return (__tree.rend()); };
+				reverse_iterator rend (void) { return (__tree.rend()); };
+				const_reverse_iterator rend (void) const { return (__tree.rend()); };
 
 				// ========================== MEMBER FUNCTIONS ========================== //
 
@@ -98,6 +110,55 @@ namespace ft
 				mapped_type &operator[] (const key_type &k)
 				{
 					return (__tree.insert(ft::make_pair(k, T())).first->second);
+				}
+
+				void erase (iterator position)
+				{
+					__tree.erase(position);
+				}
+
+				size_type erase (const key_type &k)
+				{
+					iterator it = __tree.find(ft::make_pair(k, T()));
+					if (it == end())
+						return (0);
+					__tree.erase(it);
+					return (1);
+				}
+
+				void erase (iterator first, iterator last)
+				{
+					__tree.erase(first, last);
+				}
+
+				void clear (void)
+				{
+					__tree.clear();
+				}
+
+				iterator find (const key_type &k)
+				{
+					return (__tree.find(ft::make_pair(k, T())));
+				}
+
+				const_iterator find (const key_type &k) const
+				{
+					return (__tree.find(ft::make_pair(k, T())));
+				}
+
+				size_type count (const key_type &k) const
+				{
+					return (__tree.find(ft::make_pair(k, T())) != end() ? 1 : 0);
+				}
+
+				bool empty (void) const
+				{
+					return (!__tree.size() ? true : false);
+				}
+
+				size_type size (void) const
+				{
+					return (__tree.size());
 				}
 	};
 }

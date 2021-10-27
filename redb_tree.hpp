@@ -19,16 +19,17 @@ namespace ft
 			typedef typename allocator_type::difference_type difference_type;
 			typedef typename allocator_type::size_type size_type;
 			typedef Rb_tree_iterator<T> iterator;
-			typedef Rb_tree_iterator<const T> const_iterator;
+			typedef Rb_tree_const_iterator<T> const_iterator;
 			typedef ft::reverse_iterator<iterator> reverse_iterator;
 			typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
 
 		private:
 			Rb_header<T> header;
+			size_type __len_;
 			allocator_type __alloc_;
 			Compare __cmp_;
 
-			void print_tree(Node<T> *node, std::string indent, bool right) const
+			void print_tree (Node<T> *node, std::string indent, bool right) const
 			{
 				if (node == header.tnull)
 					return;
@@ -48,14 +49,14 @@ namespace ft
 				print_tree(node->right, indent, true);
 			}
 
-			Node<T> *new_node(const T &value)
+			Node<T> *new_node (const T &value)
 			{
 				Node<T> *n = __alloc_.allocate(1);
 				__alloc_.construct(n, Node<T>(header.tnull, value));
 				return (n);
 			}
 			
-			void rotate_left(Node<T> *x)
+			void rotate_left (Node<T> *x)
 			{
 				Node<T> *y = x->right;
 
@@ -73,7 +74,7 @@ namespace ft
 				x->parent = y;
 			}
 
-			void rotate_right(Node<T> *x)
+			void rotate_right (Node<T> *x)
 			{
 				Node<T> *y = x->left;
 
@@ -91,7 +92,7 @@ namespace ft
 				x->parent = y;
 			}
 
-			void insert_recolor(Node<T> *k, Node<T> *u)
+			void insert_recolor (Node<T> *k, Node<T> *u)
 			{
 				u->color = BLACK;
 				k->parent->color = BLACK;
@@ -99,7 +100,7 @@ namespace ft
 				k = k->parent->parent;
 			}
 
-			void insert_rebalance(Node<T> *k)
+			void insert_rebalance (Node<T> *k)
 			{
 				Node<T> *u;
 
@@ -143,12 +144,94 @@ namespace ft
 				header.root->color = BLACK;
 			}
 
-			void update_borders(Node<T> *node)
+			void update_borders (Node<T> *node)
 			{
 				if (header.leftmost == header.tnull || __cmp_(node->data, header.leftmost->data))
 					header.leftmost = node;
 				if (header.rightmost == header.tnull || __cmp_(header.rightmost->data, node->data))
 					header.rightmost = node;
+			}
+
+			void transplant (Node<T> *u, Node<T> *v)
+			{
+				if (u->parent == header.tnull)
+					header.root = v;
+				else if (u == u->parent->left)
+					u->parent->left = v;
+				else
+					u->parent->right = v;
+				v->parent = u->parent;
+			}
+
+			void delete_rebalance (Node<T> *x)
+			{
+				Node<T> *s;
+				while (x != header.root && x->color == BLACK)
+				{
+					if (x == x->parent->left)
+					{
+						s = x->parent->right;
+						if (s->color == RED)
+						{
+							s->color = BLACK;
+							x->parent->color = RED;
+							rotate_left(x->parent);
+							s = x->parent->right;
+						}
+						if (s->left->color == BLACK && s->right->color == BLACK)
+						{
+							s->color = RED;
+							x = x->parent;
+						}
+						else
+						{
+							if (s->right->color == BLACK)
+							{
+								s->left->color = BLACK;
+								s->color = RED;
+								rotate_right(s);
+								s = x->parent->right;
+							} 
+							s->color = x->parent->color;
+							x->parent->color = BLACK;
+							s->right->color = BLACK;
+							rotate_left(x->parent);
+							x = header.root;
+						}
+					}
+					else
+					{
+						s = x->parent->left;
+						if (s->color == RED)
+						{
+							s->color = BLACK;
+							x->parent->color = RED;
+							rotate_right(x->parent);
+							s = x->parent->left;
+						}
+						if (s->right->color == BLACK && s->right->color == BLACK)
+						{
+							s->color = RED;
+							x = x->parent;
+						}
+						else
+						{
+							if (s->left->color == BLACK)
+							{
+								s->right->color = BLACK;
+								s->color = RED;
+								rotate_left(s);
+								s = x->parent->left;
+							} 
+							s->color = x->parent->color;
+							x->parent->color = BLACK;
+							s->left->color = BLACK;
+							rotate_right(x->parent);
+							x = header.root;
+						}
+					}
+				}
+				x->color = BLACK;
 			}
 
 			void init(void)
@@ -158,30 +241,49 @@ namespace ft
 				header.root = header.tnull;
 				header.leftmost = header.tnull;
 				header.rightmost = header.tnull;
+				__len_ = 0;
 			}
 
 		public:
 
 			// ========================== CONSTRUCTORS & DESTRUCTOR ========================== //
 
-			explicit Rb_tree(const Compare &cmp = Compare(), const allocator_type &alloc = allocator_type()) : \
+			explicit Rb_tree (const Compare &cmp = Compare(), const allocator_type &alloc = allocator_type()) : \
 					__alloc_(alloc), __cmp_(cmp)
 			{
 				init();
 			}
 
 			template <class InputIterator>
-			Rb_tree(InputIterator first, InputIterator last, const Compare &cmp = Compare(), \
+			Rb_tree (InputIterator first, InputIterator last, const Compare &cmp = Compare(), \
 					const allocator_type &alloc = allocator_type()): __alloc_(alloc), __cmp_(cmp)
 			{
 				init();
 				insert(first, last);
 			}
 
-			Rb_tree(const Rb_tree &other): __alloc_(other.__alloc_), __cmp_(other.__cmp_)
+			Rb_tree (const Rb_tree &other): __alloc_(other.__alloc_), __cmp_(other.__cmp_)
 			{
 				init();
 				insert(other.begin(), other.end());
+			}
+
+			Rb_tree &operator = (const Rb_tree &copy)
+			{
+				if (this == &copy)
+					return (*this);
+				clear();
+				__alloc_ = copy.__alloc_;
+				__cmp_ = copy.__cmp_;
+				insert(copy.begin(), copy.end());
+				return (*this);
+			}
+
+			~Rb_tree ()
+			{
+				clear();
+				__alloc_.destroy(header.tnull);
+				__alloc_.deallocate(header.tnull, 1);
 			}
 
 			// ========================== ITERATORS ========================== //
@@ -229,6 +331,7 @@ namespace ft
 				}
 				update_borders(node);
 				print_tree(header.root, "", true);
+				__len_++;
 				return (ft::make_pair(iterator(node, &header), true));
 			}
 
@@ -243,6 +346,97 @@ namespace ft
 			{
 				while (first != last)
 					insert(*first++);
+			}
+
+			iterator find (const T &val)
+			{
+				Node<T> *res = header.root;
+
+				while (res != header.tnull && (res->data).first != val.first)
+					res = __cmp_(val, res->data) ? res->left : res->right;
+				return ((res->data).first == val.first ? iterator(res, &header) : end());
+			}
+
+			const_iterator find (const T &val) const
+			{
+				Node<T> *res = header.root;
+
+				while (res != header.tnull && (res->data).first != val.first)
+					res = __cmp_(val, res->data) ? res->left : res->right;
+				return ((res->data).first == val.first ? const_iterator(res, &header) : end());
+			}
+
+			size_type size (void) const
+			{
+				return (__len_);
+			}
+
+			void erase (iterator pos)
+			{
+				iterator tmp = pos;
+
+				if (pos->_ptr == header.leftmost)
+					header.leftmost = ++tmp;
+				if (pos->_ptr == header.rightmost)
+					header.rightmost = --tmp;
+
+				Node<T> x, y;
+				y = pos;
+				unsigned char y_original_color = y->color;
+				if (pos->left == header.tnull)
+				{
+					x = pos->right;
+					transplant(pos, pos->right);
+				}
+				else if (pos->right == header.tnull)
+				{
+					x = pos->left;
+					transplant(pos, pos->left);
+				}
+				else
+				{
+					y = Node<T>::minimum(pos->right, header.tnull);
+					y_original_color = y->color;
+					x = y->right;
+					if (y->parent == pos)
+						x->parent = y;
+					else
+					{
+						transplant(y, y->right);
+						y->right = pos->right;
+						y->right->parent = y;
+					}
+					transplant(pos, y);
+					y->left = pos->left;
+					y->left->parent = y;
+					y->color = pos->color;
+				}
+				__alloc_.destroy(pos);
+				__alloc_.deallocate(pos, 1);
+				if (y_original_color == BLACK)
+					delete_rebalance(x);
+				__len_--;
+				print_tree(header.root, "", true);
+			}
+
+			void erase (iterator first, iterator last)
+			{
+				while (first != last)
+					erase(*first++);
+			}
+
+			void clear (void)
+			{
+				iterator it = begin();
+				while (it != end())
+				{
+					__alloc_.destroy(it);
+					__alloc_.deallocate(it, 1);
+				}
+				__len_ = 0;
+				header.root = header.tnull;
+				header.leftmost = header.tnull;
+				header.rightmost = header.tnull;
 			}
 	};
 }

@@ -120,7 +120,7 @@ namespace ft
 				constr_range(x.begin(), x.end());
 			}
 
-			~vector() 
+			~vector ()
 			{
 				clear();
 				__alloc_.deallocate(__begin_, capacity());
