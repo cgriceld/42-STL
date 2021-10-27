@@ -371,16 +371,16 @@ namespace ft
 				return (__len_);
 			}
 
-			void erase (iterator pos)
+			void erase (iterator position)
 			{
-				iterator tmp = pos;
+				Node<T> *pos = position.ptr();
 
-				if (pos->_ptr == header.leftmost)
-					header.leftmost = ++tmp;
-				if (pos->_ptr == header.rightmost)
-					header.rightmost = --tmp;
+				if (pos == header.leftmost)
+					header.leftmost = (++position).ptr();
+				if (pos == header.rightmost)
+					header.rightmost = (--position).ptr();
 
-				Node<T> x, y;
+				Node<T> *x, *y;
 				y = pos;
 				unsigned char y_original_color = y->color;
 				if (pos->left == header.tnull)
@@ -422,21 +422,12 @@ namespace ft
 			void erase (iterator first, iterator last)
 			{
 				while (first != last)
-					erase(*first++);
+					erase(first++);
 			}
 
 			void clear (void)
 			{
-				iterator it = begin();
-				while (it != end())
-				{
-					__alloc_.destroy(it);
-					__alloc_.deallocate(it, 1);
-				}
-				__len_ = 0;
-				header.root = header.tnull;
-				header.leftmost = header.tnull;
-				header.rightmost = header.tnull;
+				erase(begin(), end());
 			}
 	};
 }
