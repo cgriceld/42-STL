@@ -27,14 +27,9 @@ int main(void)
 	std::cout << "INSERT 2\n";
 	t.insert(ft::make_pair(2, 'a'));
 	std::cout << "================\n";
-	ft::map<int, char>::iterator it = t.begin();
-	it++;
-	++it;
-	++it;
-	++it;
-	t.erase(++t.begin(), it);
+	ft::map<int, char>::iterator it = t.upper_bound(3);
+	std::cout << it->first << it->second << std::endl;
 	std::cout << "================\n";
-	std::cout << t.empty() << t.size();
 
 	// ft::map<int, char>::iterator it = t.begin();
 	// std::cout << it->first << it->second << std::endl;

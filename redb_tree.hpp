@@ -366,6 +366,54 @@ namespace ft
 				return ((res->data).first == val.first ? const_iterator(res, &header) : end());
 			}
 
+			iterator lower_bound (const T &val)
+			{
+				iterator it;
+
+				for (it = begin(); it != end(); it++)
+				{
+					if (!__cmp_(*it, val))
+						break;
+				}
+				return (it);
+			}
+
+			const_iterator lower_bound (const T &val) const
+			{
+				const_iterator it;
+
+				for (it = begin(); it != end(); it++)
+				{
+					if (!__cmp_(*it, val))
+						break;
+				}
+				return (it);
+			}
+
+			iterator upper_bound (const T &val)
+			{
+				iterator it;
+
+				for (it = begin(); it != end(); it++)
+				{
+					if (__cmp_(val, *it))
+						break;
+				}
+				return (it);
+			}
+
+			const_iterator upper_bound (const T &val) const
+			{
+				const_iterator it;
+
+				for (it = begin(); it != end(); it++)
+				{
+					if (__cmp_(val, *it))
+						break;
+				}
+				return (it);
+			}
+
 			size_type size (void) const
 			{
 				return (__len_);
