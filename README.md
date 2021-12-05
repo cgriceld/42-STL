@@ -5,6 +5,8 @@
 ⚠️ Map is not finished yet.\
 📌 According to subject, the code is limited by C++98 standard.
 
+## features
+
 * recoded containers have `ft` namespace
 * iterator system is as well fully reimplemented
 * the structure and approach of the original container is respected as far as it's possible
