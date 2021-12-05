@@ -17,3 +17,4 @@
 
 Sample test output:
 
+<img width="690" alt="Снимок экрана 2021-12-05 в 15 38 41" src="https://user-images.githubusercontent.com/62188694/144747664-e60f4516-a0ef-40a2-94fd-40d432f63e49.png">
